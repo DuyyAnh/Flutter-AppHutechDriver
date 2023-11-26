@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter_google_maps/listtrip.dart';
 import 'package:flutter_google_maps/profile.dart';
-import 'package:flutter_google_maps/register.dart';
 import 'package:flutter_google_maps/token.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -118,7 +118,6 @@ Future<void> showNotification() async {
   final InitializationSettings initializationSettings =
       InitializationSettings(
           android: AndroidInitializationSettings('@mipmap/ic_launcher'));
-
 }
 
 MyApp() {
@@ -555,11 +554,11 @@ MyApp() {
           });
           if (index == 1) {
             Navigator.push(
-                context, MaterialPageRoute(builder: (context) => LoginPage()));
+                context, MaterialPageRoute(builder: (context) => ListTripPage()));
           }
           if (index == 2) {
             Navigator.push(
-                context, MaterialPageRoute(builder: (context) => RegisterPage()));
+                context, MaterialPageRoute(builder: (context) => LoginPage()));
           }
           if (index == 3) {
             Navigator.push(

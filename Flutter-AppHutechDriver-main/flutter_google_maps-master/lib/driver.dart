@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_google_maps/detailTrip.dart';
-import 'package:flutter_google_maps/signIn.dart';
 import 'package:flutter_google_maps/token.dart';
 import 'package:flutter_google_maps/trip.dart';
 import 'package:http/http.dart' as http;
@@ -86,15 +85,13 @@ class _DriverPageState extends State<DriverPage> {
       appBar: AppBar(
         leading: IconButton(
           onPressed: (){
-            Navigator.push(
-                context, MaterialPageRoute(builder: (context) => LoginPage()));
+             Navigator.of(context).pop();
           },
           icon:Icon(Icons.arrow_back_ios),
         ),
         title: Padding(
-          padding: const EdgeInsets.all(100.0),
-          child: Text('Driver'),
-
+          padding: const EdgeInsets.all(50.0),
+          child: Text('Danh sách đơn đặt xe'),
         ),
       ),
       body: Column(

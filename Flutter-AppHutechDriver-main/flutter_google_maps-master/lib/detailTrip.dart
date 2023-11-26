@@ -4,7 +4,6 @@ import 'package:flutter_google_maps/trip.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter_google_maps/token.dart';
-import 'package:intl/intl.dart';
 class DetailTripPage extends StatefulWidget {
   final int tripId;
 
@@ -21,9 +20,12 @@ class _DetailTripState extends State<DetailTripPage> {
   String status = "";
   int userId = 0;
   int tripId = 0; 
-  String userName="";
-  String phone="";
+  String userName= "";
+  String phone= "";
   int driverId = 0;
+  String driverName = "";
+  String phoneNumber = "";
+  String role = "";
 
   @override
   void initState() {
@@ -80,6 +82,9 @@ class _DetailTripState extends State<DetailTripPage> {
     final Map<String, dynamic> responseData = json.decode(response.body);
     setState(() {
       driverId = int.parse(responseData['userId']);
+      driverName = responseData['username'];
+      phoneNumber = responseData['phoneNumber'];
+      role = responseData['role'];
     });
   } else {
      debugPrint("Error: ${response.statusCode}");
@@ -142,8 +147,7 @@ class _DetailTripState extends State<DetailTripPage> {
       appBar: AppBar(
         leading: IconButton(
           onPressed: (){
-            Navigator.push(
-                context, MaterialPageRoute(builder: (context) => DriverPage()));
+            Navigator.of(context).pop();
           },
           icon:Icon(Icons.arrow_back_ios),
         ),
@@ -227,7 +231,29 @@ class _DetailTripState extends State<DetailTripPage> {
                               title: Text('Điểm đến \n${trip.endLocation}',  style: TextStyle(fontSize: 20)),
                             ),
                           ),
+                          if(trip.driverId==null&&trip.driverId==0)
+                          Card(
+                            elevation: 10,
+                            child: ListTile(
+                              leading: Icon(
+                                Icons.accessibility,
+                                color: Colors.black,
+                              ),
+                              title: Text('Tên tài xế \n${driverName}',  style: TextStyle(fontSize: 20)),
+                            ),
+                          ),
+                          Card(
+                            elevation: 10,
+                            child: ListTile(
+                              leading: Icon(
+                                Icons.location_on,
+                                color: Colors.black,
+                              ),
+                              title: Text('SDT \n${phoneNumber}',  style: TextStyle(fontSize: 20)),
+                            ),
+                          ),
                           SizedBox(height: 30),
+                          if(role!="Member")
                           SizedBox(
                             width: 200,
                             height: 50,
@@ -249,5 +275,5 @@ class _DetailTripState extends State<DetailTripPage> {
           ),
       ),
     );
-}
+  }
 }

@@ -1,4 +1,3 @@
-
 class Trip {
   final String startLocation;
   final String endLocation;

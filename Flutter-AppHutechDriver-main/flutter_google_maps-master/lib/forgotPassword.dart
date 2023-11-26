@@ -116,65 +116,65 @@ Future<void> resetPassword() async {
                 ),
               ),
               if (isVerificationCodeSent)
-      Column(
-        children: [
-          Stack(
-            alignment: AlignmentDirectional.centerEnd,
-            children: [
-              TextField(
-                controller: newPasswordController,
-                style: TextStyle(
-                  fontSize: 18,
-                  color: Colors.black,
-                ),
-                obscureText: isObscurePassword,
-                decoration: InputDecoration(
-                  labelText: 'Mật khẩu mới',
-                  prefixIcon: Container(
-                    width: 50,
-                    child: Image.asset('assets/image/ic_lock.png'),
-                  ),
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: Color(0xffCED0D2),
-                      width: 1,
+                Column(
+                  children: [
+                    Stack(
+                      alignment: AlignmentDirectional.centerEnd,
+                      children: [
+                        TextField(
+                          controller: newPasswordController,
+                          style: TextStyle(
+                            fontSize: 18,
+                            color: Colors.black,
+                          ),
+                          obscureText: isObscurePassword,
+                          decoration: InputDecoration(
+                            labelText: 'Mật khẩu mới',
+                            prefixIcon: Container(
+                              width: 50,
+                              child: Image.asset('assets/image/ic_lock.png'),
+                            ),
+                            border: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Color(0xffCED0D2),
+                                width: 1,
+                              ),
+                              borderRadius: BorderRadius.all(Radius.circular(6)),
+                            ),
+                          ),
+                        ),
+                        IconButton(
+                          onPressed: (){
+                            setState(() {
+                              isObscurePassword = !isObscurePassword;
+                            });},
+                          icon: Icon(Icons.remove_red_eye, color: Colors.grey,),
+                        )
+                      ],
                     ),
-                    borderRadius: BorderRadius.all(Radius.circular(6)),
-                  ),
+                    Padding(
+                      padding: EdgeInsets.fromLTRB(0, 20, 0, 20),
+                      child: TextField(
+                        controller: verificationCodeController,
+                        style: TextStyle(fontSize: 18, color: Colors.black),
+                        decoration: InputDecoration(
+                          labelText: 'Mã xác minh',
+                          prefixIcon: Container(
+                            width: 50,
+                            child: Image.asset('assets/image/ic_mail.png'),
+                          ),
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Color(0xffCED0D2),
+                              width: 1,
+                            ),
+                            borderRadius: BorderRadius.all(Radius.circular(6)),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-              ),
-              IconButton(
-                onPressed: (){
-                  setState(() {
-                    isObscurePassword = !isObscurePassword;
-                  });},
-                icon: Icon(Icons.remove_red_eye, color: Colors.grey,),
-              )
-            ],
-          ),
-          Padding(
-            padding: EdgeInsets.fromLTRB(0, 20, 0, 20),
-            child: TextField(
-              controller: verificationCodeController,
-              style: TextStyle(fontSize: 18, color: Colors.black),
-              decoration: InputDecoration(
-                labelText: 'Mã xác minh',
-                prefixIcon: Container(
-                  width: 50,
-                  child: Image.asset('assets/image/ic_mail.png'),
-                ),
-                border: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Color(0xffCED0D2),
-                    width: 1,
-                  ),
-                  borderRadius: BorderRadius.all(Radius.circular(6)),
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 10, 0, 40),
                 child: SizedBox(
