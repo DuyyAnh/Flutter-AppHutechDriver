@@ -15,82 +15,87 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   bool isVerificationCodeSent = false;
   //Chức năng gửi mã xác minh
   Future<void> sentCode() async {
-  final Map<String, dynamic> data = {
-    'email': emailController.text,
-  };
+    final Map<String, dynamic> data = {
+      'email': emailController.text,
+    };
 
-  final response = await http.post(
-    Uri.parse('https://10.0.2.2:7145/api/Auth/sentCode'),
-    body: jsonEncode(data), // Chuyển đổi dữ liệu thành JSON
-    headers: {
-      'Content-Type': 'application/json', // Đặt header Content-Type thành application/json
-    },
-  );
+    final response = await http.post(
+      Uri.parse('https://10.0.2.2:7020/api/Auth/sentCode'),
+      body: jsonEncode(data), // Chuyển đổi dữ liệu thành JSON
+      headers: {
+        'Content-Type':
+            'application/json', // Đặt header Content-Type thành application/json
+      },
+    );
 
-  if (response.statusCode == 200) {
-    setState(() {
-      isVerificationCodeSent = true;
-    });
-  }  else {
-  debugPrint("Error: ${response.statusCode}");
-  debugPrint("Response body: ${response.body}");
-}
-}
+    if (response.statusCode == 200) {
+      setState(() {
+        isVerificationCodeSent = true;
+      });
+    } else {
+      debugPrint("Error: ${response.statusCode}");
+      debugPrint("Response body: ${response.body}");
+    }
+  }
+
 //Chức năng reset password
-Future<void> resetPassword() async {
-  final Map<String, dynamic> data = {
-    'email': emailController.text,
-    'newPassword': newPasswordController.text,
-    'verificationCode': verificationCodeController.text,
-  };
+  Future<void> resetPassword() async {
+    final Map<String, dynamic> data = {
+      'email': emailController.text,
+      'newPassword': newPasswordController.text,
+      'verificationCode': verificationCodeController.text,
+    };
 
-  final response = await http.post(
-    Uri.parse('https://10.0.2.2:7145/api/Auth/resetPassword'),
-    body: jsonEncode(data), // Chuyển đổi dữ liệu thành JSON
-    headers: {
-      'Content-Type': 'application/json', // Đặt header Content-Type thành application/json
-    },
-  );
+    final response = await http.post(
+      Uri.parse('https://10.0.2.2:7020/api/Auth/resetPassword'),
+      body: jsonEncode(data), // Chuyển đổi dữ liệu thành JSON
+      headers: {
+        'Content-Type':
+            'application/json', // Đặt header Content-Type thành application/json
+      },
+    );
 
-  if (response.statusCode == 200) {
-    showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        title: Text('Đổi mật khẩu thành công'),
-        content: Text('Mật khẩu của bạn đã được đổi thành công. Vui lòng đăng nhập lại.'),
-        actions: [
-          TextButton(
-            onPressed: () {
-              // Đóng dialog
-              Navigator.of(context).pop();
-              // Chuyển về trang đăng nhập
-              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginPage()));
-            },
-            child: Text('Đóng'),
-          ),
-        ],
+    if (response.statusCode == 200) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Đổi mật khẩu thành công'),
+            content: Text(
+                'Mật khẩu của bạn đã được đổi thành công. Vui lòng đăng nhập lại.'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  // Đóng dialog
+                  Navigator.of(context).pop();
+                  // Chuyển về trang đăng nhập
+                  Navigator.pushReplacement(context,
+                      MaterialPageRoute(builder: (context) => LoginPage()));
+                },
+                child: Text('Đóng'),
+              ),
+            ],
+          );
+        },
       );
-    },
-  );
-  }  else {
-  debugPrint("Error: ${response.statusCode}");
-  debugPrint("Response body: ${response.body}");
-}
-}
+    } else {
+      debugPrint("Error: ${response.statusCode}");
+      debugPrint("Response body: ${response.body}");
+    }
+  }
+
   bool isObscurePassword = true;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Quên mật khẩu')),
-      body: Container(
-        padding: EdgeInsets.fromLTRB(30, 0, 30, 0),
-        constraints: BoxConstraints.expand(),
-        color: Colors.white,
-        child: SingleChildScrollView(
-          child: Column(
-            children: <Widget>[
+        appBar: AppBar(title: Text('Quên mật khẩu')),
+        body: Container(
+          padding: EdgeInsets.fromLTRB(30, 0, 30, 0),
+          constraints: BoxConstraints.expand(),
+          color: Colors.white,
+          child: SingleChildScrollView(
+            child: Column(children: <Widget>[
               SizedBox(
                 height: 140,
               ),
@@ -106,13 +111,9 @@ Future<void> resetPassword() async {
                         child: Image.asset('assets/image/ic_mail.png'),
                       ),
                       border: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              color: Color(0xffCED0D2),
-                              width: 1
-                          ),
-                          borderRadius: BorderRadius.all(Radius.circular(6))
-                      )
-                  ),
+                          borderSide:
+                              BorderSide(color: Color(0xffCED0D2), width: 1),
+                          borderRadius: BorderRadius.all(Radius.circular(6)))),
                 ),
               ),
               if (isVerificationCodeSent)
@@ -139,16 +140,21 @@ Future<void> resetPassword() async {
                                 color: Color(0xffCED0D2),
                                 width: 1,
                               ),
-                              borderRadius: BorderRadius.all(Radius.circular(6)),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(6)),
                             ),
                           ),
                         ),
                         IconButton(
-                          onPressed: (){
+                          onPressed: () {
                             setState(() {
                               isObscurePassword = !isObscurePassword;
-                            });},
-                          icon: Icon(Icons.remove_red_eye, color: Colors.grey,),
+                            });
+                          },
+                          icon: Icon(
+                            Icons.remove_red_eye,
+                            color: Colors.grey,
+                          ),
                         )
                       ],
                     ),
@@ -195,7 +201,7 @@ Future<void> resetPassword() async {
                   width: double.infinity,
                   height: 52,
                   child: ElevatedButton(
-                    onPressed:resetPassword,
+                    onPressed: resetPassword,
                     child: Text(
                       'Reset',
                       style: TextStyle(fontSize: 18, color: Colors.white),
@@ -203,10 +209,8 @@ Future<void> resetPassword() async {
                   ),
                 ),
               ),
-               ]
+            ]),
           ),
-      ),
-      )
-      );
-}
+        ));
+  }
 }

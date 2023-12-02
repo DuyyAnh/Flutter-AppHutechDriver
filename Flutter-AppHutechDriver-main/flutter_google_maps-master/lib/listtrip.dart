@@ -4,36 +4,39 @@ import 'package:flutter_google_maps/trip.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:intl/intl.dart';
+
 class ListTripPage extends StatefulWidget {
   @override
   _ListTripPageState createState() => _ListTripPageState();
 }
+
 class _ListTripPageState extends State<ListTripPage> {
   List<Trip> trips = [];
   int driverId = 0;
-
-
 
   @override
   void initState() {
     super.initState();
     getAllTrip();
   }
+
   Future<void> getDetailTrip(int id) async {
     final response = await http.get(
-      Uri.parse('https://10.0.2.2:7145/api/Trip/GetDetailTrip?id=$id'),
+      Uri.parse('https://10.0.2.2:7020/api/Trip/GetDetailTrip?id=$id'),
       headers: {
         'Content-Type': 'application/json',
       },
     );
 
     if (response.statusCode == 200) {
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => DetailTripPage(tripId: id)));
+      Navigator.pushReplacement(context,
+          MaterialPageRoute(builder: (context) => DetailTripPage(tripId: id)));
     }
   }
+
   Future<void> getAllTrip() async {
     final response = await http.get(
-      Uri.parse('https://10.0.2.2:7145/api/Trip/GetAllTrips'),
+      Uri.parse('https://10.0.2.2:7020/api/Trip/GetAllTrips'),
       headers: {
         'Content-Type': 'application/json',
       },
@@ -46,36 +49,38 @@ class _ListTripPageState extends State<ListTripPage> {
       });
     }
   }
-  Icon _buildStatusIcon(String status) {
-  IconData iconData;
-  Color iconColor;
 
-  switch (status) {
-    case 'Chưa nhận':
-      iconData = Icons.access_alarm;
-      iconColor = Colors.indigo;
-      break;
-    case 'Đã nhận đơn':
-      iconData = Icons.alarm_on;
-      iconColor = Colors.deepPurple;
-      break;
-    case 'Đang chạy':
-      iconData = Icons.motorcycle;
-      iconColor = Colors.deepOrange;
-      break;
-    case 'Hoàn thành':
-      iconData = Icons.done;
-      iconColor = Colors.green;
-      break;
-    default:
-      // Trạng thái không xác định, sử dụng một mặc định hoặc hiển thị cảnh báo
-      iconData = Icons.warning;
-      iconColor = Colors.grey;
+  Icon _buildStatusIcon(String status) {
+    IconData iconData;
+    Color iconColor;
+
+    switch (status) {
+      case 'Chưa nhận':
+        iconData = Icons.access_alarm;
+        iconColor = Colors.indigo;
+        break;
+      case 'Đã nhận đơn':
+        iconData = Icons.alarm_on;
+        iconColor = Colors.deepPurple;
+        break;
+      case 'Đang chạy':
+        iconData = Icons.motorcycle;
+        iconColor = Colors.deepOrange;
+        break;
+      case 'Hoàn thành':
+        iconData = Icons.done;
+        iconColor = Colors.green;
+        break;
+      default:
+        // Trạng thái không xác định, sử dụng một mặc định hoặc hiển thị cảnh báo
+        iconData = Icons.warning;
+        iconColor = Colors.grey;
+    }
+
+    return Icon(iconData, color: iconColor);
   }
 
-  return Icon(iconData, color: iconColor);
-}
- @override
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -90,7 +95,8 @@ class _ListTripPageState extends State<ListTripPage> {
                 final trip = trips[index];
                 final timeBookString = trip.timeBook;
                 final timeBookDateTime = DateTime.parse(timeBookString);
-                final formattedDateTime = DateFormat('dd-MM-yyyy HH:mm').format(timeBookDateTime);
+                final formattedDateTime =
+                    DateFormat('dd-MM-yyyy HH:mm').format(timeBookDateTime);
                 final startLocation = trip.startLocation.substring(0, 16);
                 final endLocation = trip.endLocation.substring(0, 16);
                 return Card(

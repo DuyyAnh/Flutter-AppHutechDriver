@@ -13,6 +13,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:google_places_flutter/google_places_flutter.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+
 void main() {
   HttpOverrides.global = new MyHttpOverrides();
   runApp(
@@ -44,7 +45,7 @@ class MyHttpOverrides extends HttpOverrides {
 //Chức năng lấy giá
 Future<double?> getPrice(double? Distance) async {
   final response = await http.get(
-    Uri.parse('https://10.0.2.2:7145/api/Price/GetPrice'),
+    Uri.parse('https://10.0.2.2:7020/api/Price/GetPrice'),
     headers: {
       'Content-Type': 'application/json',
     },
@@ -92,58 +93,58 @@ class MapSampleState extends State<MapSample> {
   Set<Polyline> _polylines = Set<Polyline>();
   List<LatLng> polygonLatLngs = <LatLng>[];
 //Chức năng thông báo
-Future<void> showNotification() async {
-  const AndroidNotificationDetails androidPlatformChannelSpecifics =
-      AndroidNotificationDetails(
-    '1'    
-    '12', // Thay đổi thành ID kênh thông báo của bạn
-    'HutechDriver', // Thay đổi thành tên kênh thông báo của bạn
-    importance: Importance.max,
-    priority: Priority.high,
-    showWhen: false,
-    icon: '@mipmap/ic_launcher',
-  );
+  Future<void> showNotification() async {
+    const AndroidNotificationDetails androidPlatformChannelSpecifics =
+        AndroidNotificationDetails(
+      '1'
+          '12', // Thay đổi thành ID kênh thông báo của bạn
+      'HutechDriver', // Thay đổi thành tên kênh thông báo của bạn
+      importance: Importance.max,
+      priority: Priority.high,
+      showWhen: false,
+      icon: '@mipmap/ic_launcher',
+    );
 
-  const NotificationDetails platformChannelSpecifics =
-      NotificationDetails(android: androidPlatformChannelSpecifics);
+    const NotificationDetails platformChannelSpecifics =
+        NotificationDetails(android: androidPlatformChannelSpecifics);
 
-  await flutterLocalNotificationsPlugin.show(
-    1, // ID thông báo, có thể đặt là một giá trị duy nhất
-    'Chuyến đi của bạn',
-    'Đặt xe thành công. Nhấn để xem chi tiết chuyến đi.',
-    platformChannelSpecifics,
-    payload: 'payload', // Dữ liệu bạn muốn gửi khi người dùng nhấn vào thông báo
-  );
-  void _initialize() {
-  final InitializationSettings initializationSettings =
-      InitializationSettings(
-          android: AndroidInitializationSettings('@mipmap/ic_launcher'));
-}
+    await flutterLocalNotificationsPlugin.show(
+      1, // ID thông báo, có thể đặt là một giá trị duy nhất
+      'Chuyến đi của bạn',
+      'Đặt xe thành công. Nhấn để xem chi tiết chuyến đi.',
+      platformChannelSpecifics,
+      payload:
+          'payload', // Dữ liệu bạn muốn gửi khi người dùng nhấn vào thông báo
+    );
+    void _initialize() {
+      final InitializationSettings initializationSettings =
+          InitializationSettings(
+              android: AndroidInitializationSettings('@mipmap/ic_launcher'));
+    }
 
-MyApp() {
-  _initialize();
-}
+    MyApp() {
+      _initialize();
+    }
+  }
 
-}  
   //Giải mã
   Future<void> decodetoken(String Token) async {
- 
-  final response = await http.post(
-    Uri.parse('https://10.0.2.2:7145/api/Auth/DecodeToken?token=$Token'),
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  );
+    final response = await http.post(
+      Uri.parse('https://10.0.2.2:7020/api/Auth/DecodeToken?token=$Token'),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    );
 
-  if (response.statusCode == 200) {
-    final Map<String, dynamic> responseData = json.decode(response.body);
-    setState(() {
-      id = int.parse(responseData['userId']);
-    });
-  } else {
-     debugPrint("Error: ${response.statusCode}");
-     debugPrint("Response body: ${response.body}");
-  }
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> responseData = json.decode(response.body);
+      setState(() {
+        id = int.parse(responseData['userId']);
+      });
+    } else {
+      debugPrint("Error: ${response.statusCode}");
+      debugPrint("Response body: ${response.body}");
+    }
   }
 
   //Chức năng booking
@@ -157,7 +158,7 @@ MyApp() {
       'price': price,
     };
     final response = await http.post(
-      Uri.parse('https://10.0.2.2:7145/api/Trip/Booking'),
+      Uri.parse('https://10.0.2.2:7020/api/Trip/Booking'),
       body: jsonEncode(data), // Chuyển đổi dữ liệu thành JSON
       headers: {
         'Content-Type':
@@ -166,16 +167,17 @@ MyApp() {
     );
 
     if (response.statusCode == 200) {
-    showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        title: Text('Đặt xe thành công'),
-        content: Text('Chuyến đi của bạn sẽ được nhận sớm nhất có thể. Vui lòng đợi.'),
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Đặt xe thành công'),
+            content: Text(
+                'Chuyến đi của bạn sẽ được nhận sớm nhất có thể. Vui lòng đợi.'),
+          );
+        },
       );
-    },
-  );
-    showNotification();
+      showNotification();
     } else {
       debugPrint("Error: ${response.statusCode}");
       debugPrint("Response body: ${response.body}");
@@ -292,7 +294,7 @@ MyApp() {
                 });
               },
             ),
-          SafeArea(
+            SafeArea(
               child: Align(
                 alignment: Alignment.topCenter,
                 child: Padding(
@@ -308,265 +310,284 @@ MyApp() {
                     child: Padding(
                       padding: const EdgeInsets.only(top: 5.0, bottom: 1.0),
                       child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: <Widget>[
-                            GooglePlaceAutoCompleteTextField(
-                              googleAPIKey: 'AIzaSyDQ2c_pOSOFYSjxGMwkFvCVWKjYOM9siow',
-                              textEditingController: _originController,
-                              countries: ["vn"],
-                              inputDecoration: InputDecoration(
-                                labelText: '  Điểm đi',
-                              ),
-                              debounceTime: 800,
-                              itemClick: (Prediction prediction) {
-                                setState(() {
-                                  _originController.text = prediction.description ?? "";
-                                  _originController.selection = TextSelection.fromPosition(
-                                      TextPosition(
-                                          offset: prediction.description?.length ?? 0));
-                                });
-                              },
-                              itemBuilder: (context, index, Prediction prediction) {
-                                return Container(
-                                  padding: EdgeInsets.all(10),
-                                  child: Row(
-                                    children: [
-                                      Icon(Icons.location_on),
-                                      SizedBox(
-                                        width: 7,
-                                      ),
-                                      Expanded(
-                                          child: Text("${prediction.description ?? ""}"))
-                                    ],
-                                  ),
-                                );
-                              },
-                              seperatedBuilder: Divider(),
-                              isCrossBtnShown: true,
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          GooglePlaceAutoCompleteTextField(
+                            googleAPIKey:
+                                'AIzaSyDQ2c_pOSOFYSjxGMwkFvCVWKjYOM9siow',
+                            textEditingController: _originController,
+                            countries: ["vn"],
+                            inputDecoration: InputDecoration(
+                              labelText: '  Điểm đi',
                             ),
-                            GooglePlaceAutoCompleteTextField(
-                              googleAPIKey: 'AIzaSyDQ2c_pOSOFYSjxGMwkFvCVWKjYOM9siow',
-                              textEditingController: _destinationController,
-                              countries: ["vn"],
-                              inputDecoration: InputDecoration(
-                                labelText: '  Điểm đến',
-                              ),
-                              debounceTime: 800,
-                              isLatLngRequired: false,
-                              getPlaceDetailWithLatLng: (Prediction prediction) {
-                                print("placeDetails" + prediction.lat.toString());
-                              },
-                              itemClick: (Prediction prediction) {
-                                setState(() {
-                                  _destinationController.text =
-                                      prediction.description ?? "";
-                                  _destinationController.selection =
-                                      TextSelection.fromPosition(TextPosition(
-                                          offset: prediction.description?.length ?? 0));
-                                });
-                              },
-                              itemBuilder: (context, index, Prediction prediction) {
-                                return Container(
-                                  padding: EdgeInsets.all(10),
-                                  child: Row(
-                                    children: [
-                                      Icon(Icons.location_on),
-                                      SizedBox(
-                                        width: 7,
-                                      ),
-                                      Expanded(
-                                          child: Text("${prediction.description ?? ""}"))
-                                    ],
-                                  ),
-                                );
-                              },
-                              seperatedBuilder: Divider(),
-                              isCrossBtnShown: true,
-                            ),
-                            Visibility(
-                              visible: _isvisible,
-                              // padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
-                              child: Column(
-                                children: [
-                                  Text('Distance: $distance',style: TextStyle(fontSize: 20)),
-                                  Text('Time: $time',style: TextStyle(fontSize: 20)),
-                                  Text('Price: $price đ',style: TextStyle(fontSize: 20)),
-                                  Text('Id: ${id.toString()}', style: TextStyle(fontSize: 20), ),
-                                  ElevatedButton(
-                                    onPressed: booking,
-                                    child: Text('Đặt xe'),
-                                  ),
-                                  ElevatedButton(
-                                    onPressed: () {
-                                      setState(() {
-                                        _isvisible = !_isvisible;
-                                      });
-                                    },
-                                    child: Text('Quay lại'),
-                                  ),
-                                ],
-
-                              ),
-
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(0, 30, 0, 40),
-                              child: SizedBox(
-                                // width: double.infinity,
-                                height: 30,
-                                child: ElevatedButton(
-                                  onPressed: () async {
-                                    String origin = _originController.text;
-                                    String destination = _destinationController.text;
-                                    // Chuyển đổi tên địa điểm thành tọa độ
-                                    List<Location> originLocations =
-                                    await locationFromAddress(origin);
-                                    List<Location> destinationLocations =
-                                    await locationFromAddress(destination);
-
-                                    if (originLocations.isNotEmpty &&
-                                        destinationLocations.isNotEmpty) {
-                                      // Lấy tọa độ từ danh sách kết quả
-                                      final originLocation = originLocations.first;
-                                      final destinationLocation =
-                                          destinationLocations.first;
-
-                                      var polylinePoints = PolylinePoints();
-                                      PolylineResult result =
-                                      await polylinePoints.getRouteBetweenCoordinates(
-                                        key, // Thay bằng API Key của bạn
-                                        PointLatLng(originLocation.latitude,
-                                            originLocation.longitude), // Tọa độ điểm đi
-                                        PointLatLng(
-                                            destinationLocation.latitude,
-                                            destinationLocation
-                                                .longitude), // Tọa độ điểm đến
-                                        travelMode: TravelMode
-                                            .driving, // Hoặc sử dụng travelMode tùy chọn
-                                      );
-
-                                      if (result.points.isNotEmpty) {
-                                        List<LatLng> routeCoords = result.points
-                                            .map((point) =>
-                                            LatLng(point.latitude, point.longitude))
-                                            .toList();
-                                        updatePolylines(routeCoords);
-                                        LatLngBounds bounds =
-                                        boundsFromLatLngList(routeCoords);
-                                        // Tạo một CameraUpdate để di chuyển và zoom bản đồ đến khu vực tuyến đường
-                                        CameraUpdate cameraUpdate =
-                                        CameraUpdate.newLatLngBounds(
-                                            bounds, 100); // 50 là padding cho phần biên
-
-                                        time = result.duration.toString();
-                                        decodetoken(TokenManager.getToken());
-                                        distance = result.distance.toString();
-                                        // Xóa các ký tự không phải là số hoặc dấu chấm
-                                        String distanceNumber =
-                                        distance.replaceAll(RegExp(r'[^0-9.]'), '');
-
-                                        double? distanceTest =
-                                        double.tryParse(distanceNumber);
-                                        if (distanceTest != null) {
-                                          double? newPrice = await getPrice(distanceTest);
-                                          setState(() {
-                                            _isvisible = ! _isvisible;
-                                            price = newPrice;
-                                          });
-                                        }
-
-                                        // Sử dụng GoogleMapController để thực hiện CameraUpdate
-                                        final GoogleMapController controller =
-                                        await _controller.future;
-                                        controller.animateCamera(cameraUpdate);
-                                        _markers.clear();
-                                        _markers.add(Marker(
-                                          markerId: MarkerId('destination'),
-                                          position: LatLng(destinationLocation.latitude,
-                                              destinationLocation.longitude),
-                                          icon: BitmapDescriptor.defaultMarkerWithHue(
-                                              BitmapDescriptor.hueRed),
-                                        ));
-                                      }
-                                    }
-                                  },
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(3.0),
-                                      child: Text(
-                                        'Show Route'.toUpperCase(),
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 20.0,
-                                        ),
-                                      ),
-                                  ),
-                                  style: ElevatedButton.styleFrom(
-                                    primary: Colors.red,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(20.0),
+                            debounceTime: 800,
+                            itemClick: (Prediction prediction) {
+                              setState(() {
+                                _originController.text =
+                                    prediction.description ?? "";
+                                _originController.selection =
+                                    TextSelection.fromPosition(TextPosition(
+                                        offset:
+                                            prediction.description?.length ??
+                                                0));
+                              });
+                            },
+                            itemBuilder:
+                                (context, index, Prediction prediction) {
+                              return Container(
+                                padding: EdgeInsets.all(10),
+                                child: Row(
+                                  children: [
+                                    Icon(Icons.location_on),
+                                    SizedBox(
+                                      width: 7,
                                     ),
+                                    Expanded(
+                                        child: Text(
+                                            "${prediction.description ?? ""}"))
+                                  ],
+                                ),
+                              );
+                            },
+                            seperatedBuilder: Divider(),
+                            isCrossBtnShown: true,
+                          ),
+                          GooglePlaceAutoCompleteTextField(
+                            googleAPIKey:
+                                'AIzaSyDQ2c_pOSOFYSjxGMwkFvCVWKjYOM9siow',
+                            textEditingController: _destinationController,
+                            countries: ["vn"],
+                            inputDecoration: InputDecoration(
+                              labelText: '  Điểm đến',
+                            ),
+                            debounceTime: 800,
+                            isLatLngRequired: false,
+                            getPlaceDetailWithLatLng: (Prediction prediction) {
+                              print("placeDetails" + prediction.lat.toString());
+                            },
+                            itemClick: (Prediction prediction) {
+                              setState(() {
+                                _destinationController.text =
+                                    prediction.description ?? "";
+                                _destinationController.selection =
+                                    TextSelection.fromPosition(TextPosition(
+                                        offset:
+                                            prediction.description?.length ??
+                                                0));
+                              });
+                            },
+                            itemBuilder:
+                                (context, index, Prediction prediction) {
+                              return Container(
+                                padding: EdgeInsets.all(10),
+                                child: Row(
+                                  children: [
+                                    Icon(Icons.location_on),
+                                    SizedBox(
+                                      width: 7,
+                                    ),
+                                    Expanded(
+                                        child: Text(
+                                            "${prediction.description ?? ""}"))
+                                  ],
+                                ),
+                              );
+                            },
+                            seperatedBuilder: Divider(),
+                            isCrossBtnShown: true,
+                          ),
+                          Visibility(
+                            visible: _isvisible,
+                            // padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
+                            child: Column(
+                              children: [
+                                Text('Distance: $distance',
+                                    style: TextStyle(fontSize: 20)),
+                                Text('Time: $time',
+                                    style: TextStyle(fontSize: 20)),
+                                Text('Price: $price đ',
+                                    style: TextStyle(fontSize: 20)),
+                                Text(
+                                  'Id: ${id.toString()}',
+                                  style: TextStyle(fontSize: 20),
+                                ),
+                                ElevatedButton(
+                                  onPressed: booking,
+                                  child: Text('Đặt xe'),
+                                ),
+                                ElevatedButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      _isvisible = !_isvisible;
+                                    });
+                                  },
+                                  child: Text('Quay lại'),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(0, 30, 0, 40),
+                            child: SizedBox(
+                              // width: double.infinity,
+                              height: 30,
+                              child: ElevatedButton(
+                                onPressed: () async {
+                                  String origin = _originController.text;
+                                  String destination =
+                                      _destinationController.text;
+                                  // Chuyển đổi tên địa điểm thành tọa độ
+                                  List<Location> originLocations =
+                                      await locationFromAddress(origin);
+                                  List<Location> destinationLocations =
+                                      await locationFromAddress(destination);
+
+                                  if (originLocations.isNotEmpty &&
+                                      destinationLocations.isNotEmpty) {
+                                    // Lấy tọa độ từ danh sách kết quả
+                                    final originLocation =
+                                        originLocations.first;
+                                    final destinationLocation =
+                                        destinationLocations.first;
+
+                                    var polylinePoints = PolylinePoints();
+                                    PolylineResult result = await polylinePoints
+                                        .getRouteBetweenCoordinates(
+                                      key, // Thay bằng API Key của bạn
+                                      PointLatLng(
+                                          originLocation.latitude,
+                                          originLocation
+                                              .longitude), // Tọa độ điểm đi
+                                      PointLatLng(
+                                          destinationLocation.latitude,
+                                          destinationLocation
+                                              .longitude), // Tọa độ điểm đến
+                                      travelMode: TravelMode
+                                          .driving, // Hoặc sử dụng travelMode tùy chọn
+                                    );
+
+                                    if (result.points.isNotEmpty) {
+                                      List<LatLng> routeCoords = result.points
+                                          .map((point) => LatLng(
+                                              point.latitude, point.longitude))
+                                          .toList();
+                                      updatePolylines(routeCoords);
+                                      LatLngBounds bounds =
+                                          boundsFromLatLngList(routeCoords);
+                                      // Tạo một CameraUpdate để di chuyển và zoom bản đồ đến khu vực tuyến đường
+                                      CameraUpdate cameraUpdate =
+                                          CameraUpdate.newLatLngBounds(bounds,
+                                              100); // 50 là padding cho phần biên
+
+                                      time = result.duration.toString();
+                                      decodetoken(TokenManager.getToken());
+                                      distance = result.distance.toString();
+                                      // Xóa các ký tự không phải là số hoặc dấu chấm
+                                      String distanceNumber = distance
+                                          .replaceAll(RegExp(r'[^0-9.]'), '');
+
+                                      double? distanceTest =
+                                          double.tryParse(distanceNumber);
+                                      if (distanceTest != null) {
+                                        double? newPrice =
+                                            await getPrice(distanceTest);
+                                        setState(() {
+                                          _isvisible = !_isvisible;
+                                          price = newPrice;
+                                        });
+                                      }
+
+                                      // Sử dụng GoogleMapController để thực hiện CameraUpdate
+                                      final GoogleMapController controller =
+                                          await _controller.future;
+                                      controller.animateCamera(cameraUpdate);
+                                      _markers.clear();
+                                      _markers.add(Marker(
+                                        markerId: MarkerId('destination'),
+                                        position: LatLng(
+                                            destinationLocation.latitude,
+                                            destinationLocation.longitude),
+                                        icon: BitmapDescriptor
+                                            .defaultMarkerWithHue(
+                                                BitmapDescriptor.hueRed),
+                                      ));
+                                    }
+                                  }
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.all(3.0),
+                                  child: Text(
+                                    'Show Route'.toUpperCase(),
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 20.0,
+                                    ),
+                                  ),
+                                ),
+                                style: ElevatedButton.styleFrom(
+                                  primary: Colors.red,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20.0),
                                   ),
                                 ),
                               ),
                             ),
-                          ],
+                          ),
+                        ],
                       ),
                     ),
                   ),
                 ),
               ),
-          ),
-
+            ),
           ],
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
         fixedColor: Colors.black,
-
         type: BottomNavigationBarType.fixed,
         iconSize: 30,
         items: [
           BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              label: 'Trang chủ',
-              backgroundColor:  Colors.blue,
+            icon: Icon(Icons.home),
+            label: 'Trang chủ',
+            backgroundColor: Colors.blue,
           ),
           BottomNavigationBarItem(
-              icon: Icon(Icons.access_time),
-              label: 'Họạt động',
-              backgroundColor:  Colors.red,
+            icon: Icon(Icons.access_time),
+            label: 'Họạt động',
+            backgroundColor: Colors.red,
           ),
           BottomNavigationBarItem(
-             icon: Icon(Icons.local_offer),
-              label: 'Khuyến mãi',
-              backgroundColor:  Colors.pink,
+            icon: Icon(Icons.local_offer),
+            label: 'Khuyến mãi',
+            backgroundColor: Colors.pink,
           ),
           BottomNavigationBarItem(
-              icon: Icon(Icons.account_circle),
-             label: 'Tài Khoản',
-             backgroundColor:  Colors.cyanAccent,
+            icon: Icon(Icons.account_circle),
+            label: 'Tài Khoản',
+            backgroundColor: Colors.cyanAccent,
           ),
         ],
         currentIndex: _currentIndex,
-        onTap: (index){
+        onTap: (index) {
           setState(() {
             _currentIndex = index;
           });
           if (index == 1) {
-            Navigator.push(
-                context, MaterialPageRoute(builder: (context) => ListTripPage()));
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => ListTripPage()));
           }
           if (index == 2) {
             Navigator.push(
                 context, MaterialPageRoute(builder: (context) => LoginPage()));
           }
           if (index == 3) {
-            Navigator.push(
-                context, MaterialPageRoute(builder: (context) => ProfilePage()));
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => ProfilePage()));
           }
         },
       ),
-
     );
   }
 }
