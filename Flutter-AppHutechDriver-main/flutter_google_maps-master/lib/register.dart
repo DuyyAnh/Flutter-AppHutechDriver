@@ -8,6 +8,7 @@ class RegisterPage extends StatefulWidget {
   @override
   _RegisterPageState createState() => _RegisterPageState();
 }
+
 class _RegisterPageState extends State<RegisterPage> {
   TextEditingController usernameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
@@ -25,25 +26,33 @@ class _RegisterPageState extends State<RegisterPage> {
     'fullName' : fullNameController.text,
     'address' : addressController.text,
   };
+    final Map<String, dynamic> data = {
+      'userName': usernameController.text,
+      'passWord': passwordController.text,
+      'email': emailController.text,
+      'phoneNumber': phoneController.text,
+    };
 
-  final response = await http.post(
-    Uri.parse('https://10.0.2.2:7145/api/Auth/Register'),
-    body: jsonEncode(data), // Chuyển đổi dữ liệu thành JSON
-    headers: {
-      'Content-Type': 'application/json', // Đặt header Content-Type thành application/json
-    },
-  );
+    final response = await http.post(
+      Uri.parse('https://10.0.2.2:7020/api/Auth/Register'),
+      body: jsonEncode(data), // Chuyển đổi dữ liệu thành JSON
+      headers: {
+        'Content-Type':
+            'application/json', // Đặt header Content-Type thành application/json
+      },
+    );
 
-  if (response.statusCode == 200) {
-    // Xử lý đăng nhập thành công
-    // Lưu thông tin đăng nhập hoặc mã thông báo
-    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginPage()));
-  }  else {
-  debugPrint("Error: ${response.statusCode}");
-  debugPrint("Response body: ${response.body}");
-}
+    if (response.statusCode == 200) {
+      // Xử lý đăng nhập thành công
+      // Lưu thông tin đăng nhập hoặc mã thông báo
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => LoginPage()));
+    } else {
+      debugPrint("Error: ${response.statusCode}");
+      debugPrint("Response body: ${response.body}");
+    }
+  }
 
-}
   bool isObscurePassword = true;
   @override
   Widget build(BuildContext context) {

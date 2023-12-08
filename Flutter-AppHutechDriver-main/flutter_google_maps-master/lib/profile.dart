@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_google_maps/changePassword.dart';
 import 'package:flutter_google_maps/register.dart';
@@ -8,10 +7,12 @@ import 'package:http/http.dart' as http;
 import 'edit_profile.dart';
 import 'main.dart';
 import 'dart:convert';
+
 class ProfilePage extends StatefulWidget {
   @override
   _ProfilePageState createState() => _ProfilePageState();
 }
+
 class _ProfilePageState extends State<ProfilePage> {
   String userName = "";
   String email = "";
@@ -23,14 +24,14 @@ class _ProfilePageState extends State<ProfilePage> {
     super.initState();
     decodetoken(TokenManager.getToken());
   }
+
   Future<void> logout(String Token) async {
- 
-  final response = await http.post(
-    Uri.parse('https://10.0.2.2:7145/api/Auth/Logout?token=$Token'),
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  );
+    final response = await http.post(
+      Uri.parse('https://10.0.2.2:7020/api/Auth/Logout?token=$Token'),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    );
 
   if (response.statusCode == 200) {
      return showDialog<void>(
@@ -65,14 +66,25 @@ class _ProfilePageState extends State<ProfilePage> {
   }
   }
   Future<void> decodetoken(String Token) async {
- 
-  final response = await http.post(
-    Uri.parse('https://10.0.2.2:7145/api/Auth/DecodeToken?token=$Token'),
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  );
+    final response = await http.post(
+      Uri.parse('https://10.0.2.2:7020/api/Auth/DecodeToken?token=$Token'),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    );
 
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> responseData = json.decode(response.body);
+      setState(() {
+        userName = responseData['username'];
+        email = responseData['email'];
+        phone = responseData['phoneNumber'];
+        userId = int.parse(responseData['userId']);
+      });
+    } else {
+      debugPrint("Error: ${response.statusCode}");
+      debugPrint("Response body: ${response.body}");
+    }
   if (response.statusCode == 200) {
     final Map<String, dynamic> responseData = json.decode(response.body);
     setState(() {
@@ -92,10 +104,10 @@ class _ProfilePageState extends State<ProfilePage> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          onPressed: (){
+          onPressed: () {
             Navigator.pop(context);
           },
-          icon:Icon(Icons.arrow_back_ios),
+          icon: Icon(Icons.arrow_back_ios),
         ),
         title: Padding(
           padding: const EdgeInsets.all(60.0),
@@ -108,45 +120,44 @@ class _ProfilePageState extends State<ProfilePage> {
         child: Column(
           children: [
             Stack(
-              clipBehavior: Clip.none,
-              alignment: Alignment.center,
-              children: [
-                Container(
-                  height: MediaQuery.of(context).size.height / 7,
-                  decoration: const BoxDecoration(
-                    borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(35.0),
-                      bottomRight: Radius.circular(35.0),
-                    ),
-                    color: Colors.blue,
-                    gradient: LinearGradient(
-                        colors: [
-                          Color(0xFF00CCFF),
-                          Color(0xFF3366FF),
-                        ],
-                        begin: FractionalOffset(0.0, 0.0),
-                        end: FractionalOffset(1.0, 0.0),
-                        stops: [0.0 , 1.0],
-                        tileMode: TileMode.clamp)),
-                ),
-                Positioned(
-                  bottom: -50.0,
-                  child: InkWell(
-                    child: CircleAvatar(
-                      radius: 80,
-                      backgroundColor: Colors.white,
+                clipBehavior: Clip.none,
+                alignment: Alignment.center,
+                children: [
+                  Container(
+                    height: MediaQuery.of(context).size.height / 7,
+                    decoration: const BoxDecoration(
+                        borderRadius: BorderRadius.only(
+                          bottomLeft: Radius.circular(35.0),
+                          bottomRight: Radius.circular(35.0),
+                        ),
+                        color: Colors.blue,
+                        gradient: LinearGradient(
+                            colors: [
+                              Color(0xFF00CCFF),
+                              Color(0xFF3366FF),
+                            ],
+                            begin: FractionalOffset(0.0, 0.0),
+                            end: FractionalOffset(1.0, 0.0),
+                            stops: [0.0, 1.0],
+                            tileMode: TileMode.clamp)),
+                  ),
+                  Positioned(
+                    bottom: -50.0,
+                    child: InkWell(
                       child: CircleAvatar(
-                        radius: 75,
+                        radius: 80,
                         backgroundColor: Colors.white,
-                        child: ClipRRect(
-                          child: Image.asset("assets/image/profile.png"),
+                        child: CircleAvatar(
+                          radius: 75,
+                          backgroundColor: Colors.white,
+                          child: ClipRRect(
+                            child: Image.asset("assets/image/profile.png"),
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
-              ]),
-
+                ]),
             Column(
               children: [
                 Padding(
@@ -155,7 +166,13 @@ class _ProfilePageState extends State<ProfilePage> {
                     width: 200,
                     child: ElevatedButton(
                       onPressed: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => EditProfilePage(userId: userId,)));},
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => EditProfilePage(
+                                      userId: userId,
+                                    )));
+                      },
                       style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.blue, side: BorderSide.none, shape: StadiumBorder()),
                       child: Text("Chỉnh sửa hồ sơ", style: TextStyle(color: Colors.white)),
@@ -173,32 +190,29 @@ class _ProfilePageState extends State<ProfilePage> {
                     Card(
                       elevation: 4,
                       child: ListTile(
-                        leading: Icon(
-                          Icons.person,
-                          color: Colors.black,
-                        ),
-                        title: Text('$userName')
-                        ),
-                      ),
-                      Card(
-                        elevation: 4,
-                        child: ListTile(
+                          leading: Icon(
+                            Icons.person,
+                            color: Colors.black,
+                          ),
+                          title: Text('$userName')),
+                    ),
+                    Card(
+                      elevation: 4,
+                      child: ListTile(
                           leading: Icon(
                             Icons.email,
                             color: Colors.black,
                           ),
-                          title: Text('$email')
-                        ),
-                      ),
-                     Card(
-                       elevation: 4,
-                       child: ListTile(
-                         leading: Icon(
-                           Icons.local_phone,
-                           color: Colors.black,
-                         ),
-                         title: Text('$phone')
-                       ),
+                          title: Text('$email')),
+                    ),
+                    Card(
+                      elevation: 4,
+                      child: ListTile(
+                          leading: Icon(
+                            Icons.local_phone,
+                            color: Colors.black,
+                          ),
+                          title: Text('$phone')),
                     ),
                     Card(
                       elevation: 4,
@@ -210,22 +224,24 @@ class _ProfilePageState extends State<ProfilePage> {
                         title: Text("Đổi mật khẩu"),
                         onTap: () {
                           Navigator.push(
-                              context, MaterialPageRoute(builder: (context) => ChangePasswordPage(userId:userId)));
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      ChangePasswordPage(userId: userId)));
                         },
                       ),
                     ),
                     Card(
                       elevation: 4,
                       child: ListTile(
-                        leading: Icon(
-                          Icons.keyboard_return,
-                          color: Colors.black,
-                        ),
-                        title: Text("Đăng xuất"),
-                        onTap: () async {
-                          await logout(TokenManager.getToken());
-                        }
-                      ),
+                          leading: Icon(
+                            Icons.keyboard_return,
+                            color: Colors.black,
+                          ),
+                          title: Text("Đăng xuất"),
+                          onTap: () async {
+                            await logout(TokenManager.getToken());
+                          }),
                     ),
                   ],
                 ),
@@ -236,33 +252,32 @@ class _ProfilePageState extends State<ProfilePage> {
       ),
       bottomNavigationBar: BottomNavigationBar(
         fixedColor: Colors.black,
-
         type: BottomNavigationBarType.fixed,
         iconSize: 30,
         items: [
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
             label: 'Trang chủ',
-            backgroundColor:  Colors.blue,
+            backgroundColor: Colors.blue,
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.access_time),
             label: 'Họạt động',
-            backgroundColor:  Colors.red,
+            backgroundColor: Colors.red,
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.local_offer),
             label: 'Khuyến mãi',
-            backgroundColor:  Colors.pink,
+            backgroundColor: Colors.pink,
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.account_circle),
             label: 'Tài Khoản',
-            backgroundColor:  Colors.cyanAccent,
+            backgroundColor: Colors.cyanAccent,
           ),
         ],
         currentIndex: _currentIndex,
-        onTap: (index){
+        onTap: (index) {
           setState(() {
             _currentIndex = index;
           });
@@ -275,16 +290,15 @@ class _ProfilePageState extends State<ProfilePage> {
                 context, MaterialPageRoute(builder: (context) => LoginPage()));
           }
           if (index == 2) {
-            Navigator.push(
-                context, MaterialPageRoute(builder: (context) => RegisterPage()));
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => RegisterPage()));
           }
           if (index == 3) {
-            Navigator.push(
-                context, MaterialPageRoute(builder: (context) => ProfilePage()));
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => ProfilePage()));
           }
         },
       ),
     );
   }
 }
-

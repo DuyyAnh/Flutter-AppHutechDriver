@@ -13,69 +13,71 @@ class ChangePasswordPage extends StatefulWidget {
 class _ChangePasswordPageState extends State<ChangePasswordPage> {
   TextEditingController oldPasswordController = TextEditingController();
   TextEditingController newPasswordController = TextEditingController();
-  TextEditingController verificationPasswordController = TextEditingController();
-  
+  TextEditingController verificationPasswordController =
+      TextEditingController();
+
 //Chức năng reset password
-Future<void> changePassword() async {
-  final Map<String, dynamic> data = {
-    'id': widget.userId,
-    'newPassword': newPasswordController.text,
-    'oldPassword': oldPasswordController.text,
-    'verifyNewPassword': verificationPasswordController.text,
-  };
+  Future<void> changePassword() async {
+    final Map<String, dynamic> data = {
+      'id': widget.userId,
+      'newPassword': newPasswordController.text,
+      'oldPassword': oldPasswordController.text,
+      'verifyNewPassword': verificationPasswordController.text,
+    };
 
-  final response = await http.put(
-    Uri.parse('https://10.0.2.2:7145/api/Auth/ChangePassword'),
-    body: jsonEncode(data), // Chuyển đổi dữ liệu thành JSON
-    headers: {
-      'Content-Type': 'application/json', // Đặt header Content-Type thành application/json
-    },
-  );
+    final response = await http.put(
+      Uri.parse('https://10.0.2.2:7020/api/Auth/ChangePassword'),
+      body: jsonEncode(data), // Chuyển đổi dữ liệu thành JSON
+      headers: {
+        'Content-Type':
+            'application/json', // Đặt header Content-Type thành application/json
+      },
+    );
 
-  if (response.statusCode == 200) {
-    showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        title: Text('Xác nhận đổi mật khẩu'),
-        content: Text('Bạn có chắc muốn đổi mật khẩu ?.'),
-        actions: [
-           TextButton(
-            child: Text('Quay lại', style: TextStyle(color: Colors.red)),
-            onPressed: () {
-              Navigator.of(context).pop(); // Đóng hộp thoại
-            },
-          ),
-          TextButton(
-            child: Text('Có', style: TextStyle(color: Colors.green)),
-            onPressed: () {
-              Navigator.of(context).pop(); // Đóng hộp thoại
-              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginPage()));
-            },
-          ),
-        ],
+    if (response.statusCode == 200) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Xác nhận đổi mật khẩu'),
+            content: Text('Bạn có chắc muốn đổi mật khẩu ?.'),
+            actions: [
+              TextButton(
+                child: Text('Quay lại', style: TextStyle(color: Colors.red)),
+                onPressed: () {
+                  Navigator.of(context).pop(); // Đóng hộp thoại
+                },
+              ),
+              TextButton(
+                child: Text('Có', style: TextStyle(color: Colors.green)),
+                onPressed: () {
+                  Navigator.of(context).pop(); // Đóng hộp thoại
+                  Navigator.pushReplacement(context,
+                      MaterialPageRoute(builder: (context) => LoginPage()));
+                },
+              ),
+            ],
+          );
+        },
       );
-    },
-  );
-  }  else {
-  debugPrint("Error: ${response.statusCode}");
-  debugPrint("Response body: ${response.body}");
-}
-}
+    } else {
+      debugPrint("Error: ${response.statusCode}");
+      debugPrint("Response body: ${response.body}");
+    }
+  }
 
   bool isObscurePassword1 = true;
   bool isObscurePassword2 = true;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Đổi mật khẩu')),
-      body: Container(
-        padding: EdgeInsets.fromLTRB(30, 0, 30, 0),
-        constraints: BoxConstraints.expand(),
-        color: Colors.white,
-        child: SingleChildScrollView(
-          child: Column(
-            children: <Widget>[
+        appBar: AppBar(title: Text('Đổi mật khẩu')),
+        body: Container(
+          padding: EdgeInsets.fromLTRB(30, 0, 30, 0),
+          constraints: BoxConstraints.expand(),
+          color: Colors.white,
+          child: SingleChildScrollView(
+            child: Column(children: <Widget>[
               SizedBox(
                 height: 140,
               ),
@@ -91,13 +93,9 @@ Future<void> changePassword() async {
                         child: Image.asset('assets/image/ic_mail.png'),
                       ),
                       border: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              color: Color(0xffCED0D2),
-                              width: 1
-                          ),
-                          borderRadius: BorderRadius.all(Radius.circular(6))
-                      )
-                  ),
+                          borderSide:
+                              BorderSide(color: Color(0xffCED0D2), width: 1),
+                          borderRadius: BorderRadius.all(Radius.circular(6)))),
                 ),
               ),
               Column(
@@ -128,11 +126,15 @@ Future<void> changePassword() async {
                         ),
                       ),
                       IconButton(
-                        onPressed: (){
+                        onPressed: () {
                           setState(() {
                             isObscurePassword1 = !isObscurePassword1;
-                        });},
-                        icon: Icon(Icons.remove_red_eye, color: Colors.grey,),
+                          });
+                        },
+                        icon: Icon(
+                          Icons.remove_red_eye,
+                          color: Colors.grey,
+                        ),
                       )
                     ],
                   ),
@@ -140,58 +142,59 @@ Future<void> changePassword() async {
                     alignment: AlignmentDirectional.centerEnd,
                     children: [
                       Padding(
-                          padding: EdgeInsets.fromLTRB(0, 20, 0, 20),
-                          child: TextField(
-                            controller: verificationPasswordController,
-                            style: TextStyle(fontSize: 18, color: Colors.black),
-                            obscureText: isObscurePassword2,
-                            decoration: InputDecoration(
-                              labelText: 'Nhập lại mật khẩu mới',
-                              prefixIcon: Container(
-                                width: 50,
-                                child: Image.asset('assets/image/ic_lock.png'),
+                        padding: EdgeInsets.fromLTRB(0, 20, 0, 20),
+                        child: TextField(
+                          controller: verificationPasswordController,
+                          style: TextStyle(fontSize: 18, color: Colors.black),
+                          obscureText: isObscurePassword2,
+                          decoration: InputDecoration(
+                            labelText: 'Nhập lại mật khẩu mới',
+                            prefixIcon: Container(
+                              width: 50,
+                              child: Image.asset('assets/image/ic_lock.png'),
+                            ),
+                            border: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Color(0xffCED0D2),
+                                width: 1,
                               ),
-                              border: OutlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: Color(0xffCED0D2),
-                                  width: 1,
-                                ),
-                                borderRadius: BorderRadius.all(Radius.circular(6)),
-                              ),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(6)),
                             ),
                           ),
+                        ),
                       ),
                       IconButton(
-                        onPressed: (){
+                        onPressed: () {
                           setState(() {
                             isObscurePassword2 = !isObscurePassword2;
-                          });},
-                        icon: Icon(Icons.remove_red_eye, color: Colors.grey,),
+                          });
+                        },
+                        icon: Icon(
+                          Icons.remove_red_eye,
+                          color: Colors.grey,
+                        ),
                       )
                     ],
                   ),
                 ],
-             ),
-             Padding(
+              ),
+              Padding(
                 padding: const EdgeInsets.fromLTRB(0, 30, 0, 40),
                 child: SizedBox(
-                width: double.infinity,
-                height: 52,
-                child: ElevatedButton(
-                  onPressed: changePassword,
-                  child: Text(
-                          'Đổi mật khẩu',
-                          style: TextStyle(fontSize: 18, color: Colors.white),
-                          ),
-                      ),
+                  width: double.infinity,
+                  height: 52,
+                  child: ElevatedButton(
+                    onPressed: changePassword,
+                    child: Text(
+                      'Đổi mật khẩu',
+                      style: TextStyle(fontSize: 18, color: Colors.white),
                     ),
                   ),
-               ]
+                ),
+              ),
+            ]),
           ),
-
-      ),
-    )
-  );
+        ));
   }
-
 }

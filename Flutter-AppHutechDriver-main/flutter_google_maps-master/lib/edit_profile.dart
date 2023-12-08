@@ -15,11 +15,12 @@ class EditProfilePage extends StatefulWidget {
 }
 
 class _EditProfilePageState extends State<EditProfilePage> {
-   @override
+  @override
   void initState() {
     super.initState();
     getUserInfo(widget.userId);
   }
+
   TextEditingController emailController = new TextEditingController();
   TextEditingController phoneController = new TextEditingController();
   TextEditingController nameController = new TextEditingController();
@@ -28,58 +29,60 @@ class _EditProfilePageState extends State<EditProfilePage> {
   String phone = "";
   int _currentIndex = 0;
   Future<void> changeProfile() async {
-  // Kiểm tra nếu chuyến đi đã được chấp nhận rồi
+    // Kiểm tra nếu chuyến đi đã được chấp nhận rồi
 
-  final response = await http.put(
-    Uri.parse('https://10.0.2.2:7145/api/Auth/ChangeProfile'),
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: jsonEncode({
-      'id': widget.userId,
-      'name': nameController.text.isNotEmpty ? nameController.text : userName,
-      'email': emailController.text.isNotEmpty ? emailController.text : email,
-      'phoneNumber': phoneController.text.isNotEmpty ? phoneController.text : phone,
-    }),
-  );
-
-  if (response.statusCode == 200) {
-     final Map<String, dynamic> responseData = json.decode(response.body);
-     if(responseData['token'] != null) {
-      TokenManager.setToken(responseData['token']);
-     }
-    // Nếu cập nhật thành công, cập nhật trạng thái trong ứng dụng
-     await showDialog(
-     context: context,
-     builder: (BuildContext context) {
-     return AlertDialog(
-      title: Text('Xác nhận thay đổi thông tin'),
-      content: Text('Bạn có muốn đổi thông tin không'),
-      actions: <Widget>[
-        TextButton(
-            child: Text('Quay lại', style: TextStyle(color: Colors.red)),
-            onPressed: () {
-              Navigator.of(context).pop(); // Đóng hộp thoại
-            },
-          ),
-          TextButton(
-            child: Text('Có', style: TextStyle(color: Colors.green)),
-            onPressed: () {
-              getUserInfo(widget.userId);
-              Navigator.of(context).pop(); // Đóng hộp thoại
-              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => ProfilePage()));
-            },
-          ),
-      ],
+    final response = await http.put(
+      Uri.parse('https://10.0.2.2:7020/api/Auth/ChangeProfile'),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode({
+        'id': widget.userId,
+        'name': nameController.text.isNotEmpty ? nameController.text : userName,
+        'email': emailController.text.isNotEmpty ? emailController.text : email,
+        'phoneNumber':
+            phoneController.text.isNotEmpty ? phoneController.text : phone,
+      }),
     );
-  },
-);
 
-  } 
-}
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> responseData = json.decode(response.body);
+      if (responseData['token'] != null) {
+        TokenManager.setToken(responseData['token']);
+      }
+      // Nếu cập nhật thành công, cập nhật trạng thái trong ứng dụng
+      await showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Xác nhận thay đổi thông tin'),
+            content: Text('Bạn có muốn đổi thông tin không'),
+            actions: <Widget>[
+              TextButton(
+                child: Text('Quay lại', style: TextStyle(color: Colors.red)),
+                onPressed: () {
+                  Navigator.of(context).pop(); // Đóng hộp thoại
+                },
+              ),
+              TextButton(
+                child: Text('Có', style: TextStyle(color: Colors.green)),
+                onPressed: () {
+                  getUserInfo(widget.userId);
+                  Navigator.of(context).pop(); // Đóng hộp thoại
+                  Navigator.pushReplacement(context,
+                      MaterialPageRoute(builder: (context) => ProfilePage()));
+                },
+              ),
+            ],
+          );
+        },
+      );
+    }
+  }
+
   Future<void> getUserInfo(int id) async {
     final response = await http.get(
-      Uri.parse('https://10.0.2.2:7145/api/Auth/UserInfo?id=$id'),
+      Uri.parse('https://10.0.2.2:7020/api/Auth/UserInfo?id=$id'),
       headers: {
         'Content-Type': 'application/json',
       },
@@ -94,15 +97,16 @@ class _EditProfilePageState extends State<EditProfilePage> {
       });
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-                 onPressed: (){
-                     Navigator.pop(context);
-                },
-                icon:Icon(Icons.arrow_back_ios),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: Icon(Icons.arrow_back_ios),
         ),
         title: Padding(
           padding: const EdgeInsets.all(80.0),
@@ -132,7 +136,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                             ],
                             begin: FractionalOffset(0.0, 0.0),
                             end: FractionalOffset(1.0, 0.0),
-                            stops: [0.0 , 1.0],
+                            stops: [0.0, 1.0],
                             tileMode: TileMode.clamp)),
                   ),
                   Positioned(
@@ -157,7 +161,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     child: Container(
                       width: 35,
                       height: 35,
-                      decoration: BoxDecoration( borderRadius: BorderRadius.circular(100), color: Colors.yellowAccent),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(100),
+                          color: Colors.yellowAccent),
                       child: Icon(
                         Icons.camera_alt,
                         color: Colors.black,
@@ -213,33 +219,32 @@ class _EditProfilePageState extends State<EditProfilePage> {
       ),
       bottomNavigationBar: BottomNavigationBar(
         fixedColor: Colors.black,
-
         type: BottomNavigationBarType.fixed,
         iconSize: 30,
         items: [
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
             label: 'Trang chủ',
-            backgroundColor:  Colors.blue,
+            backgroundColor: Colors.blue,
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.access_time),
             label: 'Họạt động',
-            backgroundColor:  Colors.red,
+            backgroundColor: Colors.red,
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.local_offer),
             label: 'Khuyến mãi',
-            backgroundColor:  Colors.pink,
+            backgroundColor: Colors.pink,
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.account_circle),
             label: 'Tài Khoản',
-            backgroundColor:  Colors.cyanAccent,
+            backgroundColor: Colors.cyanAccent,
           ),
         ],
         currentIndex: _currentIndex,
-        onTap: (index){
+        onTap: (index) {
           setState(() {
             _currentIndex = index;
           });
@@ -252,12 +257,12 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 context, MaterialPageRoute(builder: (context) => LoginPage()));
           }
           if (index == 2) {
-            Navigator.push(
-                context, MaterialPageRoute(builder: (context) => RegisterPage()));
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => RegisterPage()));
           }
           if (index == 3) {
-            Navigator.push(
-                context, MaterialPageRoute(builder: (context) => ProfilePage()));
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => ProfilePage()));
           }
         },
       ),

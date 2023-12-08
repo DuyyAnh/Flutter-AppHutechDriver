@@ -15,6 +15,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:google_places_flutter/google_places_flutter.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+
 void main() {
   HttpOverrides.global = new MyHttpOverrides();
   runApp(
@@ -46,7 +47,7 @@ class MyHttpOverrides extends HttpOverrides {
 //Chức năng lấy giá
 Future<double?> getPrice(double? Distance) async {
   final response = await http.get(
-    Uri.parse('https://10.0.2.2:7145/api/Price/GetPrice'),
+    Uri.parse('https://10.0.2.2:7020/api/Price/GetPrice'),
     headers: {
       'Content-Type': 'application/json',
     },
@@ -111,20 +112,20 @@ class MapSampleState extends State<MapSample> {
   }
 
 //Chức năng thông báo
-Future<void> showNotification() async {
-  const AndroidNotificationDetails androidPlatformChannelSpecifics =
-      AndroidNotificationDetails(
-    '1'    
-    '12', // Thay đổi thành ID kênh thông báo của bạn
-    'HutechDriver', // Thay đổi thành tên kênh thông báo của bạn
-    importance: Importance.max,
-    priority: Priority.high,
-    showWhen: false,
-    icon: '@mipmap/ic_launcher',
-  );
+  Future<void> showNotification() async {
+    const AndroidNotificationDetails androidPlatformChannelSpecifics =
+        AndroidNotificationDetails(
+      '1'
+          '12', // Thay đổi thành ID kênh thông báo của bạn
+      'HutechDriver', // Thay đổi thành tên kênh thông báo của bạn
+      importance: Importance.max,
+      priority: Priority.high,
+      showWhen: false,
+      icon: '@mipmap/ic_launcher',
+    );
 
-  const NotificationDetails platformChannelSpecifics =
-      NotificationDetails(android: androidPlatformChannelSpecifics);
+    const NotificationDetails platformChannelSpecifics =
+        NotificationDetails(android: androidPlatformChannelSpecifics);
 
   await flutterLocalNotificationsPlugin.show(
     1, // ID thông báo, có thể đặt là một giá trị duy nhất
@@ -136,23 +137,22 @@ Future<void> showNotification() async {
 }  
   //Giải mã
   Future<void> decodetoken(String Token) async {
- 
-  final response = await http.post(
-    Uri.parse('https://10.0.2.2:7145/api/Auth/DecodeToken?token=$Token'),
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  );
+    final response = await http.post(
+      Uri.parse('https://10.0.2.2:7020/api/Auth/DecodeToken?token=$Token'),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    );
 
-  if (response.statusCode == 200) {
-    final Map<String, dynamic> responseData = json.decode(response.body);
-    setState(() {
-      id = int.parse(responseData['userId']);
-    });
-  } else {
-     debugPrint("Error: ${response.statusCode}");
-     debugPrint("Response body: ${response.body}");
-  }
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> responseData = json.decode(response.body);
+      setState(() {
+        id = int.parse(responseData['userId']);
+      });
+    } else {
+      debugPrint("Error: ${response.statusCode}");
+      debugPrint("Response body: ${response.body}");
+    }
   }
 
   //Chức năng booking
@@ -166,7 +166,7 @@ Future<void> showNotification() async {
       'price': price,
     };
     final response = await http.post(
-      Uri.parse('https://10.0.2.2:7145/api/Trip/Booking'),
+      Uri.parse('https://10.0.2.2:7020/api/Trip/Booking'),
       body: jsonEncode(data), // Chuyển đổi dữ liệu thành JSON
       headers: {
         'Content-Type':
@@ -305,7 +305,7 @@ Future<void> showNotification() async {
                 });
               },
             ),
-          SafeArea(
+            SafeArea(
               child: Align(
                 alignment: Alignment.topCenter,
                 child: Padding(
@@ -527,58 +527,55 @@ Future<void> showNotification() async {
                   ),
                 ),
               ),
-          ),
-
+            ),
           ],
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
         fixedColor: Colors.black,
-
         type: BottomNavigationBarType.fixed,
         iconSize: 30,
         items: [
           BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              label: 'Trang chủ',
-              backgroundColor:  Colors.blue,
+            icon: Icon(Icons.home),
+            label: 'Trang chủ',
+            backgroundColor: Colors.blue,
           ),
           BottomNavigationBarItem(
-              icon: Icon(Icons.access_time),
-              label: 'Họạt động',
-              backgroundColor:  Colors.red,
+            icon: Icon(Icons.access_time),
+            label: 'Họạt động',
+            backgroundColor: Colors.red,
           ),
           BottomNavigationBarItem(
-             icon: Icon(Icons.local_offer),
-              label: 'Khuyến mãi',
-              backgroundColor:  Colors.pink,
+            icon: Icon(Icons.local_offer),
+            label: 'Khuyến mãi',
+            backgroundColor: Colors.pink,
           ),
           BottomNavigationBarItem(
-              icon: Icon(Icons.account_circle),
-             label: 'Tài Khoản',
-             backgroundColor:  Colors.cyanAccent,
+            icon: Icon(Icons.account_circle),
+            label: 'Tài Khoản',
+            backgroundColor: Colors.cyanAccent,
           ),
         ],
         currentIndex: _currentIndex,
-        onTap: (index){
+        onTap: (index) {
           setState(() {
             _currentIndex = index;
           });
           if (index == 1) {
-            Navigator.push(
-                context, MaterialPageRoute(builder: (context) => ListTripPage()));
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => ListTripPage()));
           }
           if (index == 2) {
             Navigator.push(
                 context, MaterialPageRoute(builder: (context) => LoginPage()));
           }
           if (index == 3) {
-            Navigator.push(
-                context, MaterialPageRoute(builder: (context) => ProfilePage()));
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => ProfilePage()));
           }
         },
       ),
-
     );
   }
 }

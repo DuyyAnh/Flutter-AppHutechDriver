@@ -17,71 +17,72 @@ class _LoginPageState extends State<LoginPage> {
   TextEditingController usernameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
-String userRole = "";
+  String userRole = "";
 
-Future<void> decodetoken(String Token) async {
- 
-  final response = await http.post(
-    Uri.parse('https://10.0.2.2:7145/api/Auth/DecodeToken?token=$Token'),
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  );
+  Future<void> decodetoken(String Token) async {
+    final response = await http.post(
+      Uri.parse('https://10.0.2.2:7020/api/Auth/DecodeToken?token=$Token'),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    );
 
-  if (response.statusCode == 200) {
-    final Map<String, dynamic> responseData = json.decode(response.body);
-    userRole = responseData['role'];
- 
-  } else {
-     debugPrint("Error: ${response.statusCode}");
-     debugPrint("Response body: ${response.body}");
-  }
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> responseData = json.decode(response.body);
+      userRole = responseData['role'];
+    } else {
+      debugPrint("Error: ${response.statusCode}");
+      debugPrint("Response body: ${response.body}");
+    }
   }
 
   Future<void> login() async {
-  final Map<String, dynamic> data = {
-    'userName': usernameController.text,
-    'passWord': passwordController.text,
-  };
+    final Map<String, dynamic> data = {
+      'userName': usernameController.text,
+      'passWord': passwordController.text,
+    };
 
-  final response = await http.post(
-    Uri.parse('https://10.0.2.2:7145/api/Auth/Login'),
-    body: jsonEncode(data), // Chuyển đổi dữ liệu thành JSON
-    headers: {
-      'Content-Type': 'application/json', // Đặt header Content-Type thành application/json
-    },
-  );
+    final response = await http.post(
+      Uri.parse('https://10.0.2.2:7020/api/Auth/Login'),
+      body: jsonEncode(data), // Chuyển đổi dữ liệu thành JSON
+      headers: {
+        'Content-Type':
+            'application/json', // Đặt header Content-Type thành application/json
+      },
+    );
 
-  if (response.statusCode == 200) {
-    // Xử lý đăng nhập thành công
-   final Map<String, dynamic> responseData = json.decode(response.body);
-   if (responseData['token'] != null) {
-      TokenManager.setToken(responseData['token']);
-      decodetoken(responseData['token']);
-      if (userRole == "Member") {
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MyApp()));
-    } else if (userRole == "Driver") {
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => DriverPage()));
+    if (response.statusCode == 200) {
+      // Xử lý đăng nhập thành công
+      final Map<String, dynamic> responseData = json.decode(response.body);
+      if (responseData['token'] != null) {
+        TokenManager.setToken(responseData['token']);
+        decodetoken(responseData['token']);
+        if (userRole == "Member") {
+          Navigator.pushReplacement(
+              context, MaterialPageRoute(builder: (context) => MyApp()));
+        } else if (userRole == "Driver") {
+          Navigator.pushReplacement(
+              context, MaterialPageRoute(builder: (context) => DriverPage()));
+        }
+      } else {
+        debugPrint("Error: ${response.statusCode}");
+        debugPrint("Response body: ${response.body}");
+      }
     }
-  } else {
-     debugPrint("Error: ${response.statusCode}");
-     debugPrint("Response body: ${response.body}");
   }
-  }
-}
-bool isObscurePassword = true;
+
+  bool isObscurePassword = true;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Đăng nhập')),
-      body: Container(
-        padding: EdgeInsets.fromLTRB(30, 0, 30, 0),
-        constraints: BoxConstraints.expand(),
-        color: Colors.white,
-        child: SingleChildScrollView(
-          child: Column(
-            children: <Widget>[
+        appBar: AppBar(title: Text('Đăng nhập')),
+        body: Container(
+          padding: EdgeInsets.fromLTRB(30, 0, 30, 0),
+          constraints: BoxConstraints.expand(),
+          color: Colors.white,
+          child: SingleChildScrollView(
+            child: Column(children: <Widget>[
               SizedBox(
                 height: 20,
               ),
@@ -109,13 +110,9 @@ bool isObscurePassword = true;
                         child: Image.asset('assets/image/ic_mail.png'),
                       ),
                       border: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              color: Color(0xffCED0D2),
-                              width: 1
-                          ),
-                          borderRadius: BorderRadius.all(Radius.circular(6))
-                      )
-                  ),
+                          borderSide:
+                              BorderSide(color: Color(0xffCED0D2), width: 1),
+                          borderRadius: BorderRadius.all(Radius.circular(6)))),
                 ),
               ),
               Stack(
@@ -123,10 +120,7 @@ bool isObscurePassword = true;
                 children: [
                   TextField(
                     controller: passwordController,
-                    style: TextStyle(
-                        fontSize: 18,
-                        color: Colors.black
-                    ),
+                    style: TextStyle(fontSize: 18, color: Colors.black),
                     obscureText: isObscurePassword,
                     decoration: InputDecoration(
                         labelText: 'Mật khẩu',
@@ -135,20 +129,21 @@ bool isObscurePassword = true;
                           child: Image.asset('assets/image/ic_lock.png'),
                         ),
                         border: OutlineInputBorder(
-                            borderSide: BorderSide(
-                                color: Color(0xffCED0D2),
-                                width: 1
-                            ),
-                            borderRadius: BorderRadius.all(Radius.circular(6))
-                        )
-                    ),
+                            borderSide:
+                                BorderSide(color: Color(0xffCED0D2), width: 1),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(6)))),
                   ),
                   IconButton(
-                    onPressed: (){
+                    onPressed: () {
                       setState(() {
                         isObscurePassword = !isObscurePassword;
-                      });},
-                    icon: Icon(Icons.remove_red_eye, color: Colors.grey,),
+                      });
+                    },
+                    icon: Icon(
+                      Icons.remove_red_eye,
+                      color: Colors.grey,
+                    ),
                   )
                 ],
               ),
@@ -168,14 +163,13 @@ bool isObscurePassword = true;
               ),
               ),
               ),
-
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 30, 0, 40),
                 child: SizedBox(
                   width: double.infinity,
                   height: 52,
                   child: ElevatedButton(
-                    onPressed:login,
+                    onPressed: login,
                     child: Text(
                       'Đăng nhập',
                       style: TextStyle(fontSize: 18, color: Colors.white),
@@ -183,7 +177,7 @@ bool isObscurePassword = true;
                   ),
                 ),
               ),
-               Padding(
+              Padding(
                 padding: const EdgeInsets.fromLTRB(0, 0, 0, 40),
                 child: RichText(
                     text: TextSpan(

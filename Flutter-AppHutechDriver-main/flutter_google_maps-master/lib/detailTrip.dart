@@ -4,6 +4,7 @@ import 'package:flutter_google_maps/trip.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter_google_maps/token.dart';
+
 class DetailTripPage extends StatefulWidget {
   final int tripId;
 
@@ -11,17 +12,18 @@ class DetailTripPage extends StatefulWidget {
   @override
   _DetailTripState createState() => _DetailTripState();
 }
+
 class _DetailTripState extends State<DetailTripPage> {
-  late Trip trip; 
-  String startLocation = ""; 
-  String endLocation = ""; 
-  String timeBook = ""; 
+  late Trip trip;
+  String startLocation = "";
+  String endLocation = "";
+  String timeBook = "";
   double price = 0.0;
   String status = "";
   int userId = 0;
-  int tripId = 0; 
-  String userName= "";
-  String phone= "";
+  int tripId = 0;
+  String userName = "";
+  String phone = "";
   int driverId = 0;
   String driverName = "";
   String phoneNumber = "";
@@ -31,13 +33,22 @@ class _DetailTripState extends State<DetailTripPage> {
   void initState() {
     super.initState();
     decodetoken(TokenManager.getToken());
-    trip = new Trip(startLocation: startLocation, endLocation: endLocation, timeBook: timeBook, price: price, status: status, userId: userId, tripId: tripId);// Gọi hàm lấy chi tiết chuyến đi khi widget được tạo
+    trip = new Trip(
+        startLocation: startLocation,
+        endLocation: endLocation,
+        timeBook: timeBook,
+        price: price,
+        status: status,
+        userId: userId,
+        tripId: tripId); // Gọi hàm lấy chi tiết chuyến đi khi widget được tạo
     getTripDetails();
   }
+
   //Lấy chi tiết trip
-   Future<void> getTripDetails() async {
+  Future<void> getTripDetails() async {
     final response = await http.get(
-      Uri.parse('https://10.0.2.2:7145/api/Trip/GetDetailTrip?id=${widget.tripId}'),
+      Uri.parse(
+          'https://10.0.2.2:7020/api/Trip/GetDetailTrip?id=${widget.tripId}'),
       headers: {
         'Content-Type': 'application/json',
       },
@@ -51,10 +62,11 @@ class _DetailTripState extends State<DetailTripPage> {
       });
     }
   }
+
   //Lấy chi tiết user
   Future<void> getUserInfo(int id) async {
     final response = await http.get(
-      Uri.parse('https://10.0.2.2:7145/api/Auth/UserInfo?id=$id'),
+      Uri.parse('https://10.0.2.2:7020/api/Auth/UserInfo?id=$id'),
       headers: {
         'Content-Type': 'application/json',
       },
@@ -68,15 +80,15 @@ class _DetailTripState extends State<DetailTripPage> {
       });
     }
   }
+
   //giải mã
   Future<void> decodetoken(String Token) async {
- 
-  final response = await http.post(
-    Uri.parse('https://10.0.2.2:7145/api/Auth/DecodeToken?token=$Token'),
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  );
+    final response = await http.post(
+      Uri.parse('https://10.0.2.2:7020/api/Auth/DecodeToken?token=$Token'),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    );
 
   if (response.statusCode == 200) {
     final Map<String, dynamic> responseData = json.decode(response.body);
@@ -91,70 +103,69 @@ class _DetailTripState extends State<DetailTripPage> {
      debugPrint("Response body: ${response.body}");
   }
   }
+
   //Chức năng chấp nhận
   Future<void> acceptTrip() async {
-  // Kiểm tra nếu chuyến đi đã được chấp nhận rồi
-  if (trip.driverId != 0 && trip.driverId != null) {
-    // Hiển thị thông báo hoặc thực hiện các xử lý khác nếu cần
-    print('Chuyến đi đã được chấp nhận.');
-    return;
-  }
+    // Kiểm tra nếu chuyến đi đã được chấp nhận rồi
+    if (trip.driverId != 0 && trip.driverId != null) {
+      // Hiển thị thông báo hoặc thực hiện các xử lý khác nếu cần
+      print('Chuyến đi đã được chấp nhận.');
+      return;
+    }
 
-  // Gọi API để cập nhật thông tin chuyến đi (ví dụ: /api/Trip/AcceptTrip)
-  final response = await http.post(
-    Uri.parse('https://10.0.2.2:7145/api/Trip/AcceptTrip'),
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: jsonEncode({
-      'tripId': trip.tripId,
-      'driverId': driverId, // Điền hàm để lấy id người dùng hiện tại
-    }),
-  );
-
-  if (response.statusCode == 200) {
-    // Nếu cập nhật thành công, cập nhật trạng thái trong ứng dụng
-    await showDialog(
-     context: context,
-     builder: (BuildContext context) {
-     return AlertDialog(
-      title: Text('Nhận đơn thành công'),
-      content: Text('Bạn có thể liên hệ với khách hàng qua số điện thoại'),
-      actions: <Widget>[
-        TextButton(
-          onPressed: () {
-            // Đóng dialog
-            Navigator.of(context).pop();
-            
-            // Chuyển đến trang mới
-            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => DriverPage()));
-          },
-          child: Text('OK'),
-        ),
-      ],
+    // Gọi API để cập nhật thông tin chuyến đi (ví dụ: /api/Trip/AcceptTrip)
+    final response = await http.post(
+      Uri.parse('https://10.0.2.2:7020/api/Trip/AcceptTrip'),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode({
+        'tripId': trip.tripId,
+        'driverId': driverId, // Điền hàm để lấy id người dùng hiện tại
+      }),
     );
-  },
-);
 
-  } 
-}
+    if (response.statusCode == 200) {
+      // Nếu cập nhật thành công, cập nhật trạng thái trong ứng dụng
+      await showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Nhận đơn thành công'),
+            content:
+                Text('Bạn có thể liên hệ với khách hàng qua số điện thoại'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  // Đóng dialog
+                  Navigator.of(context).pop();
 
-
+                  // Chuyển đến trang mới
+                  Navigator.pushReplacement(context,
+                      MaterialPageRoute(builder: (context) => DriverPage()));
+                },
+                child: Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          onPressed: (){
+          onPressed: () {
             Navigator.of(context).pop();
           },
-          icon:Icon(Icons.arrow_back_ios),
+          icon: Icon(Icons.arrow_back_ios),
         ),
         title: Padding(
           padding: const EdgeInsets.all(60.0),
           child: Text('Chi tiết chuyến đi'),
-
         ),
       ),
       body: Container(
