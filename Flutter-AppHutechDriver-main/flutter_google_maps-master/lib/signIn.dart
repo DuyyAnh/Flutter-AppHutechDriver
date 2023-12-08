@@ -83,19 +83,19 @@ bool isObscurePassword = true;
           child: Column(
             children: <Widget>[
               SizedBox(
-                height: 140,
+                height: 20,
               ),
-              Image.asset('assets/image/ic_car_green.png'),
+              Image.asset('assets/image/logo.png',width: 300.0, height: 180.0,),
               Padding(
-                padding: const EdgeInsets.fromLTRB(0, 40, 0, 6),
+                padding: const EdgeInsets.fromLTRB(0, 0, 0, 6),
                 child: Text(
-                  'Welcome back!',
-                  style: TextStyle(fontSize: 22, color: Color(0xff333333)),
+                  'HUTECH DRIVER',
+                  style: TextStyle(fontSize: 30, color: Color(0xff333333), fontWeight: FontWeight.w800),
                 ),
               ),
               Text(
-                'Login to continue using iCab',
-                style: TextStyle(fontSize: 16, color: Color(0xff606470)),
+                'Đăng nhập để sử dụng dịch vụ đặt xe',
+                style: TextStyle(fontSize: 18, color: Color(0xff606470) , fontWeight: FontWeight.w700),
               ),
               Padding(
                 padding: EdgeInsets.fromLTRB(0, 80, 0, 20),
@@ -103,7 +103,7 @@ bool isObscurePassword = true;
                   controller: usernameController,
                   style: TextStyle(fontSize: 18, color: Colors.black),
                   decoration: InputDecoration(
-                      labelText: 'Email',
+                      labelText: 'Tài khoản',
                       prefixIcon: Container(
                         width: 50,
                         child: Image.asset('assets/image/ic_mail.png'),
@@ -129,7 +129,7 @@ bool isObscurePassword = true;
                     ),
                     obscureText: isObscurePassword,
                     decoration: InputDecoration(
-                        labelText: 'Password',
+                        labelText: 'Mật khẩu',
                         prefixIcon: Container(
                           width: 50,
                           child: Image.asset('assets/image/ic_lock.png'),
@@ -163,7 +163,7 @@ bool isObscurePassword = true;
               constraints: BoxConstraints.loose(Size(double.infinity, 30)),
               alignment: AlignmentDirectional.centerEnd,
               child: Text(
-              'Forgot password?',
+              'Quên mật khẩu?',
               style: TextStyle(fontSize: 16, color: Color(0xff3277D8)),
               ),
               ),
@@ -177,7 +177,7 @@ bool isObscurePassword = true;
                   child: ElevatedButton(
                     onPressed:login,
                     child: Text(
-                      'Log In',
+                      'Đăng nhập',
                       style: TextStyle(fontSize: 18, color: Colors.white),
                     ),
                   ),
@@ -187,7 +187,7 @@ bool isObscurePassword = true;
                 padding: const EdgeInsets.fromLTRB(0, 0, 0, 40),
                 child: RichText(
                     text: TextSpan(
-                        text: 'New user? ',
+                        text: 'Bạn là người mới? ',
                         style: TextStyle(color: Color(0xff606470), fontSize: 16),
                         children: <TextSpan>[
                           TextSpan(
@@ -195,7 +195,7 @@ bool isObscurePassword = true;
                                 ..onTap = () {
                                   Navigator.push(context, MaterialPageRoute(builder: (context) => RegisterPage()));
                                 },
-                              text: 'Sign up for a new account',
+                              text: 'Đăng ký tài khoản mới',
                               style: TextStyle(
                                   color: Color(0xff3277D8), fontSize: 16
                               )

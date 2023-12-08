@@ -76,7 +76,7 @@ class _ProfilePageState extends State<ProfilePage> {
   if (response.statusCode == 200) {
     final Map<String, dynamic> responseData = json.decode(response.body);
     setState(() {
-      userName = responseData['username'];
+      userName = responseData['fullName'];
       email = responseData['email'];
       phone = responseData['phoneNumber'];
       userId = int.parse(responseData['userId']);
@@ -98,8 +98,8 @@ class _ProfilePageState extends State<ProfilePage> {
           icon:Icon(Icons.arrow_back_ios),
         ),
         title: Padding(
-          padding: const EdgeInsets.all(100.0),
-          child: Text('Profile'),
+          padding: const EdgeInsets.all(60.0),
+          child: Text('Hồ sơ tài khoản'),
 
         ),
       ),
@@ -158,7 +158,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         Navigator.push(context, MaterialPageRoute(builder: (context) => EditProfilePage(userId: userId,)));},
                       style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.blue, side: BorderSide.none, shape: StadiumBorder()),
-                      child: Text("Edit Profile", style: TextStyle(color: Colors.white)),
+                      child: Text("Chỉnh sửa hồ sơ", style: TextStyle(color: Colors.white)),
                     ),
                   ),
                 ),

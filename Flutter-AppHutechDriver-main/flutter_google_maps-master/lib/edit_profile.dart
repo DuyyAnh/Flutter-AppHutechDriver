@@ -88,7 +88,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
     if (response.statusCode == 200) {
       final Map<String, dynamic> responseData = json.decode(response.body);
       setState(() {
-        userName = responseData['userName'];
+        userName = responseData['fullName'];
         phone = responseData['phoneNumber'];
         email = responseData['email'];
       });
@@ -105,8 +105,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 icon:Icon(Icons.arrow_back_ios),
         ),
         title: Padding(
-          padding: const EdgeInsets.all(100.0),
-          child: Text('Edit Profile'),
+          padding: const EdgeInsets.all(80.0),
+          child: Text('Chỉnh sửa hồ sơ'),
         ),
       ),
       backgroundColor: Colors.white,
@@ -202,7 +202,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                           },
                         style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.blue, side: BorderSide.none, shape: StadiumBorder()),
-                        child: Text("Save Profile", style: TextStyle(color: Colors.white)),
+                        child: Text("Lưu hồ sơ", style: TextStyle(color: Colors.white)),
                       ),
                     ),
                   ],

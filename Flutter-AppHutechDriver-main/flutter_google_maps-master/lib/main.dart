@@ -1,9 +1,11 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter_google_maps/detailTrip.dart';
 import 'package:flutter_google_maps/listtrip.dart';
 import 'package:flutter_google_maps/profile.dart';
 import 'package:flutter_google_maps/token.dart';
+import 'package:flutter_google_maps/trip.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geocoding/geocoding.dart';
@@ -84,6 +86,8 @@ class MapSampleState extends State<MapSample> {
   String time = "";
   double? price = 0;
   int id = 0;
+  int tripId = 0;
+  late Trip trip; 
 
   final String key = 'AIzaSyDQ2c_pOSOFYSjxGMwkFvCVWKjYOM9siow';
 
@@ -91,6 +95,21 @@ class MapSampleState extends State<MapSample> {
   Set<Polygon> _polygons = Set<Polygon>();
   Set<Polyline> _polylines = Set<Polyline>();
   List<LatLng> polygonLatLngs = <LatLng>[];
+   void _initialize() async {
+    const AndroidInitializationSettings initializationSettingsAndroid =
+        AndroidInitializationSettings('@mipmap/ic_launcher');
+    final InitializationSettings initializationSettings =
+        InitializationSettings(android: initializationSettingsAndroid);
+    await flutterLocalNotificationsPlugin.initialize(
+      initializationSettings,
+      onSelectNotification: onSelectNotification,
+    );
+  }
+ Future<void> onSelectNotification(String? payload) async {
+    // Xử lý sự kiện khi người dùng nhấn vào thông báo, ví dụ chuyển đến trang chi tiết chuyến đi
+    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => DetailTripPage(tripId: tripId)));
+  }
+
 //Chức năng thông báo
 Future<void> showNotification() async {
   const AndroidNotificationDetails androidPlatformChannelSpecifics =
@@ -112,18 +131,8 @@ Future<void> showNotification() async {
     'Chuyến đi của bạn',
     'Đặt xe thành công. Nhấn để xem chi tiết chuyến đi.',
     platformChannelSpecifics,
-    payload: 'payload', // Dữ liệu bạn muốn gửi khi người dùng nhấn vào thông báo
+    payload: tripId.toString(), // Dữ liệu bạn muốn gửi khi người dùng nhấn vào thông báo
   );
-  void _initialize() {
-  final InitializationSettings initializationSettings =
-      InitializationSettings(
-          android: AndroidInitializationSettings('@mipmap/ic_launcher'));
-}
-
-MyApp() {
-  _initialize();
-}
-
 }  
   //Giải mã
   Future<void> decodetoken(String Token) async {
@@ -166,6 +175,10 @@ MyApp() {
     );
 
     if (response.statusCode == 200) {
+      setState(() {
+        trip = Trip.fromJson(json.decode(response.body));
+        tripId = trip.tripId;
+      });
     showDialog(
     context: context,
     builder: (BuildContext context) {
@@ -231,7 +244,7 @@ MyApp() {
   @override
   void initState() {
     super.initState();
-
+    _initialize();
     _setMarker(LatLng(10.776889, 106.700897));
   }
 
@@ -391,7 +404,6 @@ MyApp() {
                                   Text('Distance: $distance',style: TextStyle(fontSize: 20)),
                                   Text('Time: $time',style: TextStyle(fontSize: 20)),
                                   Text('Price: $price đ',style: TextStyle(fontSize: 20)),
-                                  Text('Id: ${id.toString()}', style: TextStyle(fontSize: 20), ),
                                   ElevatedButton(
                                     onPressed: booking,
                                     child: Text('Đặt xe'),
@@ -493,7 +505,7 @@ MyApp() {
                                   child: Padding(
                                     padding: const EdgeInsets.all(3.0),
                                       child: Text(
-                                        'Show Route'.toUpperCase(),
+                                        'Hiển thị quảng đường'.toUpperCase(),
                                         style: TextStyle(
                                           color: Colors.white,
                                           fontSize: 20.0,

@@ -63,7 +63,7 @@ class _DetailTripState extends State<DetailTripPage> {
     if (response.statusCode == 200) {
       final Map<String, dynamic> responseData = json.decode(response.body);
       setState(() {
-        userName = responseData['userName'];
+        userName = responseData['fullName'];
         phone = responseData['phoneNumber'];
       });
     }
@@ -82,7 +82,7 @@ class _DetailTripState extends State<DetailTripPage> {
     final Map<String, dynamic> responseData = json.decode(response.body);
     setState(() {
       driverId = int.parse(responseData['userId']);
-      driverName = responseData['username'];
+      driverName = responseData['fullName'];
       phoneNumber = responseData['phoneNumber'];
       role = responseData['role'];
     });
@@ -231,26 +231,30 @@ class _DetailTripState extends State<DetailTripPage> {
                               title: Text('Điểm đến \n${trip.endLocation}',  style: TextStyle(fontSize: 20)),
                             ),
                           ),
-                          if(trip.driverId==null&&trip.driverId==0)
-                          Card(
-                            elevation: 10,
-                            child: ListTile(
-                              leading: Icon(
-                                Icons.accessibility,
-                                color: Colors.black,
+                          if (trip.driverId == null && trip.driverId == 0)
+                          Column(
+                            children: [
+                                Card(
+                                  elevation: 10,
+                                  child: ListTile(
+                                    leading: Icon(
+                                      Icons.accessibility,
+                                      color: Colors.black,
+                                    ),
+                                    title: Text('Tên tài xế \n${driverName}', style: TextStyle(fontSize: 20)),
+                                  ),
+                                ),
+                              Card(
+                                elevation: 10,
+                                child: ListTile(
+                                  leading: Icon(
+                                    Icons.phone,
+                                    color: Colors.black,
+                                  ),
+                                  title: Text('SDT \n${phoneNumber}', style: TextStyle(fontSize: 20)),
+                                ),
                               ),
-                              title: Text('Tên tài xế \n${driverName}',  style: TextStyle(fontSize: 20)),
-                            ),
-                          ),
-                          Card(
-                            elevation: 10,
-                            child: ListTile(
-                              leading: Icon(
-                                Icons.location_on,
-                                color: Colors.black,
-                              ),
-                              title: Text('SDT \n${phoneNumber}',  style: TextStyle(fontSize: 20)),
-                            ),
+                            ],
                           ),
                           SizedBox(height: 30),
                           if(role!="Member")

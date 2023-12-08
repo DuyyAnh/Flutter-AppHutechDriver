@@ -13,6 +13,8 @@ class _RegisterPageState extends State<RegisterPage> {
   TextEditingController passwordController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
+  TextEditingController fullNameController = TextEditingController();
+  TextEditingController addressController = TextEditingController();
 
   Future<void> register() async {
   final Map<String, dynamic> data = {
@@ -20,6 +22,8 @@ class _RegisterPageState extends State<RegisterPage> {
     'passWord': passwordController.text,
     'email': emailController.text,
     'phoneNumber': phoneController.text,
+    'fullName' : fullNameController.text,
+    'address' : addressController.text,
   };
 
   final response = await http.post(
@@ -56,18 +60,18 @@ class _RegisterPageState extends State<RegisterPage> {
           child: SingleChildScrollView(
               child: Column(
                   children: <Widget>[
-                    SizedBox(height: 80),
-                    Image.asset('assets/image/ic_car_red.png'),
+                    SizedBox(height: 20),
+                     Image.asset('assets/image/logo.png',width: 300.0, height: 180.0,),
                     Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 40, 0, 6),
+                      padding: const EdgeInsets.fromLTRB(0, 0, 0, 6),
                       child: Text(
-                        'Welcome Aboard!',
-                        style: TextStyle(fontSize: 22, color: Color(0xff333333)),
+                        'HUTECH DRIVER',
+                        style: TextStyle(fontSize: 30, color: Color(0xff333333), fontWeight: FontWeight.w800),
                       ),
                     ),
                     Text(
-                      'Signup with iCab simple steps',
-                      style: TextStyle(fontSize: 16, color: Color(0xff606470)),
+                      'Đăng ký tài khoản với Hutech Driver',
+                      style: TextStyle(fontSize: 16, color: Color(0xff606470), fontWeight: FontWeight.w700),
                     ),
                     Padding(
                       padding: const EdgeInsets.fromLTRB(0, 30, 0, 20),
@@ -75,10 +79,40 @@ class _RegisterPageState extends State<RegisterPage> {
                         controller: usernameController,
                           style: TextStyle(fontSize: 18, color: Colors.black),
                           decoration: InputDecoration(
-                            labelText: 'Username',
+                            labelText: 'Tài khoản',
                             prefixIcon: Container(
                               width: 50,
                               child: Image.asset('assets/image/ic_user.png')),
+                            border: OutlineInputBorder(
+                            borderSide: BorderSide(color: Color(0xffCED0D2), width: 1),
+                            borderRadius: BorderRadius.all(Radius.circular(6)))),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 10, 0, 20),
+                      child: TextField(
+                        controller: fullNameController,
+                          style: TextStyle(fontSize: 18, color: Colors.black),
+                          decoration: InputDecoration(
+                            labelText: 'Họ và tên',
+                            prefixIcon: Container(
+                              width: 50,
+                              child: Image.asset('assets/image/ic_user.png')),
+                            border: OutlineInputBorder(
+                            borderSide: BorderSide(color: Color(0xffCED0D2), width: 1),
+                            borderRadius: BorderRadius.all(Radius.circular(6)))),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 10, 0, 20),
+                      child: TextField(
+                        controller: addressController,
+                          style: TextStyle(fontSize: 18, color: Colors.black),
+                          decoration: InputDecoration(
+                            labelText: 'Địa chỉ',
+                            prefixIcon: Container(
+                              width: 50,
+                              child: Image.asset('assets/image/ic_place.png',width: 0, height: 0,)),
                             border: OutlineInputBorder(
                             borderSide: BorderSide(color: Color(0xffCED0D2), width: 1),
                             borderRadius: BorderRadius.all(Radius.circular(6)))),
@@ -105,7 +139,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         controller: phoneController,
                         style: TextStyle(fontSize: 18, color: Colors.black),
                         decoration: InputDecoration(
-                            labelText: 'PhoneNumber',
+                            labelText: 'Số điện thoại',
                             prefixIcon: Container(
                               width: 50,
                               child: Image.asset('assets/image/ic_phone.png')),
@@ -124,7 +158,7 @@ class _RegisterPageState extends State<RegisterPage> {
                             style: TextStyle(fontSize: 18, color: Colors.black),
                             obscureText: isObscurePassword,
                             decoration: InputDecoration(
-                                labelText: 'Password',
+                                labelText: 'Mật khẩu',
                                 prefixIcon: Container(
                                     width: 50,
                                     child: Image.asset('assets/image/ic_lock.png')),
@@ -150,7 +184,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         child: ElevatedButton(
                           onPressed: register,
                           child: Text(
-                            'Log up',
+                            'Đăng ký',
                             style: TextStyle(fontSize: 18, color: Colors.white),
                           ),
                         ),
@@ -160,7 +194,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       padding: const EdgeInsets.fromLTRB(0, 0, 0, 40),
                       child: RichText(
                           text: TextSpan(
-                              text: 'Already a user? ',
+                              text: 'Bạn đã có tài khoản? ',
                               style: TextStyle(
                                   fontSize: 16,
                                   color: Color(0xff606470)
@@ -171,7 +205,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                       ..onTap = () {
                                         Navigator.push(context, MaterialPageRoute(builder: (context) => LoginPage()));
                                       },
-                                    text: 'Login now',
+                                    text: 'Đăng nhập ngay',
                                     style: TextStyle(
                                         fontSize: 16,
                                         color: Color(0xff3277D8)
