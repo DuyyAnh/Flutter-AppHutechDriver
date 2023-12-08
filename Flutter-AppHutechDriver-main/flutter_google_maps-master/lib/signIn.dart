@@ -21,7 +21,7 @@ class _LoginPageState extends State<LoginPage> {
 
   Future<void> decodetoken(String Token) async {
     final response = await http.post(
-      Uri.parse('https://10.0.2.2:7020/api/Auth/DecodeToken?token=$Token'),
+      Uri.parse('https://10.0.2.2:7145/api/Auth/DecodeToken?token=$Token'),
       headers: {
         'Content-Type': 'application/json',
       },
@@ -43,7 +43,7 @@ class _LoginPageState extends State<LoginPage> {
     };
 
     final response = await http.post(
-      Uri.parse('https://10.0.2.2:7020/api/Auth/Login'),
+      Uri.parse('https://10.0.2.2:7145/api/Auth/Login'),
       body: jsonEncode(data), // Chuyển đổi dữ liệu thành JSON
       headers: {
         'Content-Type':
@@ -84,7 +84,7 @@ class _LoginPageState extends State<LoginPage> {
           child: SingleChildScrollView(
             child: Column(children: <Widget>[
               SizedBox(
-                height: 20,
+                height: 45,
               ),
               Image.asset('assets/image/logo.png',width: 300.0, height: 180.0,),
               Padding(

@@ -48,7 +48,7 @@ class _DetailTripState extends State<DetailTripPage> {
   Future<void> getTripDetails() async {
     final response = await http.get(
       Uri.parse(
-          'https://10.0.2.2:7020/api/Trip/GetDetailTrip?id=${widget.tripId}'),
+          'https://10.0.2.2:7145/api/Trip/GetDetailTrip?id=${widget.tripId}'),
       headers: {
         'Content-Type': 'application/json',
       },
@@ -66,7 +66,7 @@ class _DetailTripState extends State<DetailTripPage> {
   //Lấy chi tiết user
   Future<void> getUserInfo(int id) async {
     final response = await http.get(
-      Uri.parse('https://10.0.2.2:7020/api/Auth/UserInfo?id=$id'),
+      Uri.parse('https://10.0.2.2:7145/api/Auth/UserInfo?id=$id'),
       headers: {
         'Content-Type': 'application/json',
       },
@@ -84,7 +84,7 @@ class _DetailTripState extends State<DetailTripPage> {
   //giải mã
   Future<void> decodetoken(String Token) async {
     final response = await http.post(
-      Uri.parse('https://10.0.2.2:7020/api/Auth/DecodeToken?token=$Token'),
+      Uri.parse('https://10.0.2.2:7145/api/Auth/DecodeToken?token=$Token'),
       headers: {
         'Content-Type': 'application/json',
       },
@@ -115,7 +115,7 @@ class _DetailTripState extends State<DetailTripPage> {
 
     // Gọi API để cập nhật thông tin chuyến đi (ví dụ: /api/Trip/AcceptTrip)
     final response = await http.post(
-      Uri.parse('https://10.0.2.2:7020/api/Trip/AcceptTrip'),
+      Uri.parse('https://10.0.2.2:7145/api/Trip/AcceptTrip'),
       headers: {
         'Content-Type': 'application/json',
       },

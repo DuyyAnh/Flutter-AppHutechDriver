@@ -45,7 +45,7 @@ class _DriverPageState extends State<DriverPage> {
 
   Future<void> getDetailTrip(int id) async {
     final response = await http.get(
-      Uri.parse('https://10.0.2.2:7020/api/Trip/GetDetailTrip?id=$id'),
+      Uri.parse('https://10.0.2.2:7145/api/Trip/GetDetailTrip?id=$id'),
       headers: {
         'Content-Type': 'application/json',
       },
@@ -59,7 +59,7 @@ class _DriverPageState extends State<DriverPage> {
 
   Future<void> decodetoken(String Token) async {
     final response = await http.post(
-      Uri.parse('https://10.0.2.2:7020/api/Auth/DecodeToken?token=$Token'),
+      Uri.parse('https://10.0.2.2:7145/api/Auth/DecodeToken?token=$Token'),
       headers: {
         'Content-Type': 'application/json',
       },
@@ -78,7 +78,7 @@ class _DriverPageState extends State<DriverPage> {
 
   Future<void> getAllTrip() async {
     final response = await http.get(
-      Uri.parse('https://10.0.2.2:7020/api/Trip/GetAllTrips'),
+      Uri.parse('https://10.0.2.2:7145/api/Trip/GetAllTrips'),
       headers: {
         'Content-Type': 'application/json',
       },

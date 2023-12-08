@@ -26,7 +26,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
     };
 
     final response = await http.put(
-      Uri.parse('https://10.0.2.2:7020/api/Auth/ChangePassword'),
+      Uri.parse('https://10.0.2.2:7145/api/Auth/ChangePassword'),
       body: jsonEncode(data), // Chuyển đổi dữ liệu thành JSON
       headers: {
         'Content-Type':

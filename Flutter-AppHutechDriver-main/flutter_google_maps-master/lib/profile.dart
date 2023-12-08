@@ -27,7 +27,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Future<void> logout(String Token) async {
     final response = await http.post(
-      Uri.parse('https://10.0.2.2:7020/api/Auth/Logout?token=$Token'),
+      Uri.parse('https://10.0.2.2:7145/api/Auth/Logout?token=$Token'),
       headers: {
         'Content-Type': 'application/json',
       },
@@ -67,7 +67,7 @@ class _ProfilePageState extends State<ProfilePage> {
   }
   Future<void> decodetoken(String Token) async {
     final response = await http.post(
-      Uri.parse('https://10.0.2.2:7020/api/Auth/DecodeToken?token=$Token'),
+      Uri.parse('https://10.0.2.2:7145/api/Auth/DecodeToken?token=$Token'),
       headers: {
         'Content-Type': 'application/json',
       },
@@ -76,7 +76,7 @@ class _ProfilePageState extends State<ProfilePage> {
     if (response.statusCode == 200) {
       final Map<String, dynamic> responseData = json.decode(response.body);
       setState(() {
-        userName = responseData['username'];
+        userName = responseData['fullName'];
         email = responseData['email'];
         phone = responseData['phoneNumber'];
         userId = int.parse(responseData['userId']);
@@ -85,18 +85,6 @@ class _ProfilePageState extends State<ProfilePage> {
       debugPrint("Error: ${response.statusCode}");
       debugPrint("Response body: ${response.body}");
     }
-  if (response.statusCode == 200) {
-    final Map<String, dynamic> responseData = json.decode(response.body);
-    setState(() {
-      userName = responseData['fullName'];
-      email = responseData['email'];
-      phone = responseData['phoneNumber'];
-      userId = int.parse(responseData['userId']);
-    });
-  } else {
-     debugPrint("Error: ${response.statusCode}");
-     debugPrint("Response body: ${response.body}");
-  }
   }
 
   @override

@@ -47,7 +47,7 @@ class MyHttpOverrides extends HttpOverrides {
 //Chức năng lấy giá
 Future<double?> getPrice(double? Distance) async {
   final response = await http.get(
-    Uri.parse('https://10.0.2.2:7020/api/Price/GetPrice'),
+    Uri.parse('https://10.0.2.2:7145/api/Price/GetPrice'),
     headers: {
       'Content-Type': 'application/json',
     },
@@ -116,7 +116,7 @@ class MapSampleState extends State<MapSample> {
     const AndroidNotificationDetails androidPlatformChannelSpecifics =
         AndroidNotificationDetails(
       '1'
-          '12', // Thay đổi thành ID kênh thông báo của bạn
+      '12', // Thay đổi thành ID kênh thông báo của bạn
       'HutechDriver', // Thay đổi thành tên kênh thông báo của bạn
       importance: Importance.max,
       priority: Priority.high,
@@ -138,7 +138,7 @@ class MapSampleState extends State<MapSample> {
   //Giải mã
   Future<void> decodetoken(String Token) async {
     final response = await http.post(
-      Uri.parse('https://10.0.2.2:7020/api/Auth/DecodeToken?token=$Token'),
+      Uri.parse('https://10.0.2.2:7145/api/Auth/DecodeToken?token=$Token'),
       headers: {
         'Content-Type': 'application/json',
       },
@@ -166,7 +166,7 @@ class MapSampleState extends State<MapSample> {
       'price': price,
     };
     final response = await http.post(
-      Uri.parse('https://10.0.2.2:7020/api/Trip/Booking'),
+      Uri.parse('https://10.0.2.2:7145/api/Trip/Booking'),
       body: jsonEncode(data), // Chuyển đổi dữ liệu thành JSON
       headers: {
         'Content-Type':

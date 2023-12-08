@@ -26,15 +26,8 @@ class _RegisterPageState extends State<RegisterPage> {
     'fullName' : fullNameController.text,
     'address' : addressController.text,
   };
-    final Map<String, dynamic> data = {
-      'userName': usernameController.text,
-      'passWord': passwordController.text,
-      'email': emailController.text,
-      'phoneNumber': phoneController.text,
-    };
-
     final response = await http.post(
-      Uri.parse('https://10.0.2.2:7020/api/Auth/Register'),
+      Uri.parse('https://10.0.2.2:7145/api/Auth/Register'),
       body: jsonEncode(data), // Chuyển đổi dữ liệu thành JSON
       headers: {
         'Content-Type':
