@@ -2,6 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_google_maps/forgotPassword.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_google_maps/main.dart';
 import 'package:flutter_google_maps/driver.dart';
@@ -16,12 +17,13 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   TextEditingController usernameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
-
   String userRole = "";
-
+  String locationIP = "";
+  late String lat;
+  late String long;
   Future<void> decodetoken(String Token) async {
     final response = await http.post(
-      Uri.parse('https://10.0.2.2:7145/api/Auth/DecodeToken?token=$Token'),
+      Uri.parse('https://10.0.2.2:7238/api/Auth/DecodeToken?token=$Token'),
       headers: {
         'Content-Type': 'application/json',
       },
@@ -35,15 +37,37 @@ class _LoginPageState extends State<LoginPage> {
       debugPrint("Response body: ${response.body}");
     }
   }
-
+  //Chức năng lấy địa chỉ GPS của tài xế
+  Future<void> getCurrentLocation() async{
+    bool serviceEnable = await Geolocator.isLocationServiceEnabled();
+    if(!serviceEnable){
+      Geolocator.openAppSettings();
+    }
+    LocationPermission permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        return Future.error('Dịch vụ lấy vị trí bị từ chối.');
+      }
+    }
+     if (permission == LocationPermission.deniedForever) {
+       return Future.error('Dịch vụ lấy vị trí bị từ chối vĩnh viễn! Tôi không thể lấy vị trí của bạn');
+     }
+    Position position = await Geolocator.getCurrentPosition();
+    setState(() {
+      locationIP = '${position.latitude},${position.longitude}';
+    });
+    login();
+  }
   Future<void> login() async {
     final Map<String, dynamic> data = {
       'userName': usernameController.text,
       'passWord': passwordController.text,
+      'locationIP' : locationIP,
     };
 
     final response = await http.post(
-      Uri.parse('https://10.0.2.2:7145/api/Auth/Login'),
+      Uri.parse('https://10.0.2.2:7238/api/Auth/Login'),
       body: jsonEncode(data), // Chuyển đổi dữ liệu thành JSON
       headers: {
         'Content-Type':
@@ -62,7 +86,9 @@ class _LoginPageState extends State<LoginPage> {
               context, MaterialPageRoute(builder: (context) => MyApp()));
         } else if (userRole == "Driver") {
           Navigator.pushReplacement(
-              context, MaterialPageRoute(builder: (context) => DriverPage()));
+                context,
+                MaterialPageRoute(builder: (context) => DriverPage()),
+              );
         }
       } else {
         debugPrint("Error: ${response.statusCode}");
@@ -169,7 +195,7 @@ class _LoginPageState extends State<LoginPage> {
                   width: double.infinity,
                   height: 52,
                   child: ElevatedButton(
-                    onPressed: login,
+                    onPressed: getCurrentLocation,
                     child: Text(
                       'Đăng nhập',
                       style: TextStyle(fontSize: 18, color: Colors.white),

@@ -32,7 +32,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
     // Kiểm tra nếu chuyến đi đã được chấp nhận rồi
 
     final response = await http.put(
-      Uri.parse('https://10.0.2.2:7145/api/Auth/ChangeProfile'),
+      Uri.parse('https://10.0.2.2:7238/api/Auth/ChangeProfile'),
       headers: {
         'Content-Type': 'application/json',
       },
@@ -82,7 +82,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   Future<void> getUserInfo(int id) async {
     final response = await http.get(
-      Uri.parse('https://10.0.2.2:7145/api/Auth/UserInfo?id=$id'),
+      Uri.parse('https://10.0.2.2:7238/api/Auth/UserInfo?id=$id'),
       headers: {
         'Content-Type': 'application/json',
       },

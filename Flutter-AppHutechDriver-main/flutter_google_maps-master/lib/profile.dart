@@ -27,7 +27,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Future<void> logout(String Token) async {
     final response = await http.post(
-      Uri.parse('https://10.0.2.2:7145/api/Auth/Logout?token=$Token'),
+      Uri.parse('https://10.0.2.2:7238/api/Auth/Logout?token=$Token'),
       headers: {
         'Content-Type': 'application/json',
       },
@@ -67,7 +67,7 @@ class _ProfilePageState extends State<ProfilePage> {
   }
   Future<void> decodetoken(String Token) async {
     final response = await http.post(
-      Uri.parse('https://10.0.2.2:7145/api/Auth/DecodeToken?token=$Token'),
+      Uri.parse('https://10.0.2.2:7238/api/Auth/DecodeToken?token=$Token'),
       headers: {
         'Content-Type': 'application/json',
       },

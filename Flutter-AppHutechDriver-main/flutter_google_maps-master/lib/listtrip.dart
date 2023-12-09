@@ -19,10 +19,9 @@ class _ListTripPageState extends State<ListTripPage> {
     super.initState();
     getAllTrip();
   }
-
   Future<void> getDetailTrip(int id) async {
     final response = await http.get(
-      Uri.parse('https://10.0.2.2:7145/api/Trip/GetDetailTrip?id=$id'),
+      Uri.parse('https://10.0.2.2:7238/api/Trip/GetDetailTrip?id=$id'),
       headers: {
         'Content-Type': 'application/json',
       },
@@ -36,7 +35,7 @@ class _ListTripPageState extends State<ListTripPage> {
 
   Future<void> getAllTrip() async {
     final response = await http.get(
-      Uri.parse('https://10.0.2.2:7145/api/Trip/GetAllTrips'),
+      Uri.parse('https://10.0.2.2:7238/api/Trip/GetAllTrips'),
       headers: {
         'Content-Type': 'application/json',
       },

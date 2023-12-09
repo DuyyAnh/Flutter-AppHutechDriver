@@ -27,7 +27,7 @@ class _RegisterPageState extends State<RegisterPage> {
     'address' : addressController.text,
   };
     final response = await http.post(
-      Uri.parse('https://10.0.2.2:7145/api/Auth/Register'),
+      Uri.parse('https://10.0.2.2:7238/api/Auth/Register'),
       body: jsonEncode(data), // Chuyển đổi dữ liệu thành JSON
       headers: {
         'Content-Type':

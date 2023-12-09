@@ -20,7 +20,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
     };
 
     final response = await http.post(
-      Uri.parse('https://10.0.2.2:7145/api/Auth/sentCode'),
+      Uri.parse('https://10.0.2.2:7238/api/Auth/sentCode'),
       body: jsonEncode(data), // Chuyển đổi dữ liệu thành JSON
       headers: {
         'Content-Type':
@@ -47,7 +47,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
     };
 
     final response = await http.post(
-      Uri.parse('https://10.0.2.2:7145/api/Auth/resetPassword'),
+      Uri.parse('https://10.0.2.2:7238/api/Auth/resetPassword'),
       body: jsonEncode(data), // Chuyển đổi dữ liệu thành JSON
       headers: {
         'Content-Type':

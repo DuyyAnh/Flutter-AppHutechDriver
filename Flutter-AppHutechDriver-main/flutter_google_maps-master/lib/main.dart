@@ -15,7 +15,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:google_places_flutter/google_places_flutter.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-
+import 'package:flutter_google_maps/listpost.dart';
 void main() {
   HttpOverrides.global = new MyHttpOverrides();
   runApp(
@@ -47,7 +47,7 @@ class MyHttpOverrides extends HttpOverrides {
 //Chức năng lấy giá
 Future<double?> getPrice(double? Distance) async {
   final response = await http.get(
-    Uri.parse('https://10.0.2.2:7145/api/Price/GetPrice'),
+    Uri.parse('https://10.0.2.2:7238/api/Price/GetPrice'),
     headers: {
       'Content-Type': 'application/json',
     },
@@ -138,7 +138,7 @@ class MapSampleState extends State<MapSample> {
   //Giải mã
   Future<void> decodetoken(String Token) async {
     final response = await http.post(
-      Uri.parse('https://10.0.2.2:7145/api/Auth/DecodeToken?token=$Token'),
+      Uri.parse('https://10.0.2.2:7238/api/Auth/DecodeToken?token=$Token'),
       headers: {
         'Content-Type': 'application/json',
       },
@@ -166,7 +166,7 @@ class MapSampleState extends State<MapSample> {
       'price': price,
     };
     final response = await http.post(
-      Uri.parse('https://10.0.2.2:7145/api/Trip/Booking'),
+      Uri.parse('https://10.0.2.2:7238/api/Trip/Booking'),
       body: jsonEncode(data), // Chuyển đổi dữ liệu thành JSON
       headers: {
         'Content-Type':
@@ -456,7 +456,6 @@ class MapSampleState extends State<MapSample> {
                                         travelMode: TravelMode
                                             .driving, // Hoặc sử dụng travelMode tùy chọn
                                       );
-
                                       if (result.points.isNotEmpty) {
                                         List<LatLng> routeCoords = result.points
                                             .map((point) =>
@@ -568,7 +567,7 @@ class MapSampleState extends State<MapSample> {
           }
           if (index == 2) {
             Navigator.push(
-                context, MaterialPageRoute(builder: (context) => LoginPage()));
+                context, MaterialPageRoute(builder: (context) => PostPage()));
           }
           if (index == 3) {
             Navigator.push(context,
