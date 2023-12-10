@@ -82,10 +82,10 @@ class _LoginPageState extends State<LoginPage> {
         TokenManager.setToken(responseData['token']);
         decodetoken(responseData['token']);
         if (userRole == "Member") {
-          Navigator.pushReplacement(
+          Navigator.push(
               context, MaterialPageRoute(builder: (context) => MyApp()));
         } else if (userRole == "Driver") {
-          Navigator.pushReplacement(
+          Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => DriverPage()),
               );

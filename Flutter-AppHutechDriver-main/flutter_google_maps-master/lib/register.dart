@@ -38,7 +38,7 @@ class _RegisterPageState extends State<RegisterPage> {
     if (response.statusCode == 200) {
       // Xử lý đăng nhập thành công
       // Lưu thông tin đăng nhập hoặc mã thông báo
-      Navigator.pushReplacement(
+      Navigator.push(
           context, MaterialPageRoute(builder: (context) => LoginPage()));
     } else {
       debugPrint("Error: ${response.statusCode}");

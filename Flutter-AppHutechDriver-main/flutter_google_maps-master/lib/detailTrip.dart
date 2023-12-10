@@ -106,9 +106,7 @@ class _DetailTripState extends State<DetailTripPage> {
 
   //Chức năng chấp nhận
   Future<void> acceptTrip() async {
-    // Kiểm tra nếu chuyến đi đã được chấp nhận rồi
     if (trip.driverId != 0 && trip.driverId != null) {
-      // Hiển thị thông báo hoặc thực hiện các xử lý khác nếu cần
       print('Chuyến đi đã được chấp nhận.');
       return;
     }
@@ -121,7 +119,7 @@ class _DetailTripState extends State<DetailTripPage> {
       },
       body: jsonEncode({
         'tripId': trip.tripId,
-        'driverId': driverId, // Điền hàm để lấy id người dùng hiện tại
+        'driverId': driverId,
       }),
     );
 
@@ -141,7 +139,7 @@ class _DetailTripState extends State<DetailTripPage> {
                   Navigator.of(context).pop();
 
                   // Chuyển đến trang mới
-                  Navigator.pushReplacement(context,
+                  Navigator.push(context,
                       MaterialPageRoute(builder: (context) => DriverPage()));
                 },
                 child: Text('OK'),
@@ -152,7 +150,43 @@ class _DetailTripState extends State<DetailTripPage> {
       );
     }
   }
+   Future<void> donetrip() async {
+    final response = await http.post(
+      Uri.parse('https://10.0.2.2:7238/api/Trip/DoneTrip?tripId=$tripId'),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    );
 
+    if (response.statusCode == 200) {
+     await showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Đơn đã hoàn thành'),
+            content:
+                Text('Bạn có thể nhận đơn khác trên app'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  // Đóng dialog
+                  Navigator.of(context).pop();
+
+                  // Chuyển đến trang mới
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => DriverPage()));
+                },
+                child: Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
+    } else {
+      debugPrint("Error: ${response.statusCode}");
+      debugPrint("Response body: ${response.body}");
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -268,7 +302,7 @@ class _DetailTripState extends State<DetailTripPage> {
                             ],
                           ),
                           SizedBox(height: 30),
-                          if(role!="Member")
+                          if(role!="Member"&&trip.status=="Chưa nhận")
                           SizedBox(
                             width: 200,
                             height: 50,
@@ -281,13 +315,26 @@ class _DetailTripState extends State<DetailTripPage> {
                               child: Text('Chấp nhận đơn'),
                             ),
                           ),
+                          if(role!="Member"&&trip.status=="Đã nhận đơn")
+                          SizedBox(
+                            width: 200,
+                            height: 50,
+                            child: ElevatedButton(
+                              onPressed: () {
+                                acceptTrip();
+                              },
+                              style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.blue, side: BorderSide.none, shape: StadiumBorder()),
+                              child: Text('Hoàn thành'),
+                            ),
+                          ),
                         ],
                       ),
                     ),
                   ),
-                ],
-              ),
+            ],
           ),
+        ),
       ),
     );
   }

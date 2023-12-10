@@ -69,7 +69,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                   // Đóng dialog
                   Navigator.of(context).pop();
                   // Chuyển về trang đăng nhập
-                  Navigator.pushReplacement(context,
+                  Navigator.push(context,
                       MaterialPageRoute(builder: (context) => LoginPage()));
                 },
                 child: Text('Đóng'),

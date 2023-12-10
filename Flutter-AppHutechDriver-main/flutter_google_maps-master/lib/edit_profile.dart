@@ -69,7 +69,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 onPressed: () {
                   getUserInfo(widget.userId);
                   Navigator.of(context).pop(); // Đóng hộp thoại
-                  Navigator.pushReplacement(context,
+                  Navigator.push(context,
                       MaterialPageRoute(builder: (context) => ProfilePage()));
                 },
               ),

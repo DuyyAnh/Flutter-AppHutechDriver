@@ -28,7 +28,7 @@ class _ListTripPageState extends State<ListTripPage> {
     );
 
     if (response.statusCode == 200) {
-      Navigator.pushReplacement(context,
+      Navigator.push(context,
           MaterialPageRoute(builder: (context) => DetailTripPage(tripId: id)));
     }
   }

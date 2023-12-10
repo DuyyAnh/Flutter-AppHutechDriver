@@ -52,7 +52,7 @@ class _ProfilePageState extends State<ProfilePage> {
             onPressed: () {
               Navigator.of(context).pop(); // Đóng hộp thoại
               // Chuyển hướng đến trang đăng nhập
-               Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginPage())); // Thay thế '/login' bằng đường dẫn tới trang đăng nhập của bạn
+               Navigator.push(context, MaterialPageRoute(builder: (context) => LoginPage())); // Thay thế '/login' bằng đường dẫn tới trang đăng nhập của bạn
             },
           ),
         ],

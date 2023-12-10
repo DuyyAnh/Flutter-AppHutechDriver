@@ -101,7 +101,7 @@ Future<LatLng?> getCoordinatesFromAddress(String address) async {
     );
 
     if (response.statusCode == 200) {
-      Navigator.pushReplacement(context,
+      Navigator.push(context,
           MaterialPageRoute(builder: (context) => DetailTripPage(tripId: id)));
     }
   }
