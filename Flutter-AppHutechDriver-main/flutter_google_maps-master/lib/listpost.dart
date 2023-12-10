@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_google_maps/post.dart';
 import 'package:flutter_google_maps/profile.dart';
 import 'package:flutter_google_maps/signIn.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:http/http.dart' as http;
+import 'listtrip.dart';
 import 'main.dart';
 import 'dart:convert';
 
@@ -74,25 +76,36 @@ class _PostPageState extends State<PostPage> {
                 itemCount: posts.length,
                 itemBuilder: (context, index) {
                   final post = posts[index];
-                  return Card(
-                    child: ListTile(
-                      leading: CircleAvatar(
-                        radius: 32,
-                        child: Image.asset("assets/image/logo.png"),
-                      ),
-                      title: Text('${post.title}'),
-                      subtitle: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                  return Slidable(
+                      endActionPane: ActionPane(
+                        extentRatio: .3,
+                        motion: ScrollMotion(
+                        ),
                         children: [
-                          Text("${post.description}"),
-                          Text("${post.createdate}"),
+                          SlidableAction(
+                            onPressed: (context) {}, icon: Icons.reply, backgroundColor: Colors.grey[300]!,
+                          ),
+                          SlidableAction(
+                            onPressed: (context) {}, icon: Icons.delete, foregroundColor: Colors.white, backgroundColor: Colors.red[700]!,
+                          ),
                         ],
-                        
                       ),
-                      trailing: Icon(Icons.arrow_forward),
-                      onTap: () async {
-                      },
-                    ),
+                      child: ListTile(
+                        leading: CircleAvatar(
+                          radius: 32,
+                          child: Image.asset("assets/image/logo.png"),
+                        ),
+                        title: Text('${post.title}', style: TextStyle(fontWeight: FontWeight.w700),),
+                        subtitle: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text("${post.description}" , style: TextStyle(fontWeight: FontWeight.w600), maxLines: 2, overflow: TextOverflow.ellipsis,),
+                            Text("${post.createdate}" , style: TextStyle(fontWeight: FontWeight.w600)),
+                          ],
+                        ),
+                        // trailing: Icon(Icons.arrow_forward),
+                        // onTap: () {},
+                      ),
                   );
                 },
               ),
@@ -137,7 +150,7 @@ class _PostPageState extends State<PostPage> {
           }
           if (index == 1) {
             Navigator.push(
-                context, MaterialPageRoute(builder: (context) => LoginPage()));
+                context, MaterialPageRoute(builder: (context) => ListTripPage()));
           }
           if (index == 2) {
             Navigator.push(context,
