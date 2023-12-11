@@ -1,13 +1,13 @@
 import 'package:flutter/gestures.dart';
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter_google_maps/forgotPassword.dart';
+import 'package:flutter_google_maps/login/forgotPassword.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
-import 'package:flutter_google_maps/main.dart';
-import 'package:flutter_google_maps/driver.dart';
-import 'package:flutter_google_maps/register.dart';
-import 'package:flutter_google_maps/token.dart';
+import 'package:flutter_google_maps/member/main.dart';
+import 'package:flutter_google_maps/driver/driver.dart';
+import 'package:flutter_google_maps/login/register.dart';
+import 'package:flutter_google_maps/data/token.dart';
 
 class LoginPage extends StatefulWidget {
   @override

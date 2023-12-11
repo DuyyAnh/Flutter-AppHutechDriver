@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_google_maps/profile.dart';
-import 'package:flutter_google_maps/register.dart';
-import 'package:flutter_google_maps/signIn.dart';
-import 'package:flutter_google_maps/token.dart';
+import 'package:flutter_google_maps/member/profile.dart';
+import 'package:flutter_google_maps/login/register.dart';
+import 'package:flutter_google_maps/login/signIn.dart';
+import 'package:flutter_google_maps/data/token.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'main.dart';

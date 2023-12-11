@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter_google_maps/signIn.dart';
+import 'package:flutter_google_maps/login/signIn.dart';
 import 'package:http/http.dart' as http;
 
 class ForgotPasswordPage extends StatefulWidget {

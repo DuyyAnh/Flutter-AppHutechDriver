@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_google_maps/driver.dart';
-import 'package:flutter_google_maps/trip.dart';
+import 'package:flutter_google_maps/driver/directionsl.dart';
+import 'package:flutter_google_maps/driver/driver.dart';
+import 'package:flutter_google_maps/data/trip.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:flutter_google_maps/token.dart';
+import 'package:flutter_google_maps/data/token.dart';
 
 class DetailTripPage extends StatefulWidget {
   final int tripId;
@@ -15,6 +16,7 @@ class DetailTripPage extends StatefulWidget {
 
 class _DetailTripState extends State<DetailTripPage> {
   late Trip trip;
+  String start = "";
   String startLocation = "";
   String endLocation = "";
   String timeBook = "";
@@ -28,6 +30,7 @@ class _DetailTripState extends State<DetailTripPage> {
   String driverName = "";
   String phoneNumber = "";
   String role = "";
+  String locationIP = "";
 
   @override
   void initState() {
@@ -97,6 +100,7 @@ class _DetailTripState extends State<DetailTripPage> {
       driverName = responseData['fullName'];
       phoneNumber = responseData['phoneNumber'];
       role = responseData['role'];
+      locationIP = responseData['location'];
     });
   } else {
      debugPrint("Error: ${response.statusCode}");
@@ -140,7 +144,7 @@ class _DetailTripState extends State<DetailTripPage> {
 
                   // Chuyển đến trang mới
                   Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => DriverPage()));
+                      MaterialPageRoute(builder: (context) => DirectionPage(tripId: trip.tripId,startLocation: trip.startLocation,locationIP: locationIP,driverId: driverId)));
                 },
                 child: Text('OK'),
               ),

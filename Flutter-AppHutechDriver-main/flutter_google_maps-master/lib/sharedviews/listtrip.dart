@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_google_maps/detailTrip.dart';
-import 'package:flutter_google_maps/trip.dart';
+import 'package:flutter_google_maps/sharedviews/detailTrip.dart';
+import 'package:flutter_google_maps/data/trip.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:intl/intl.dart';

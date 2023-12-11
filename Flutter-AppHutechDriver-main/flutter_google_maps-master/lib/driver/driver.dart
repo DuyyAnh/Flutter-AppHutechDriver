@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_google_maps/detailTrip.dart';
-import 'package:flutter_google_maps/trip.dart';
+import 'package:flutter_google_maps/sharedviews/detailTrip.dart';
+import 'package:flutter_google_maps/data/trip.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:intl/intl.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:flutter_google_maps/token.dart';
+import 'package:flutter_google_maps/data/token.dart';
+import 'package:flutter_google_maps/member/profile.dart';
+import 'package:flutter_google_maps/member/listpost.dart';
 class DriverPage extends StatefulWidget {
   @override
   _DriverPageState createState() => _DriverPageState();
@@ -18,6 +20,7 @@ class _DriverPageState extends State<DriverPage> {
   String selectedStatus = 'Chưa nhận';
   int driverId = 0;
   String locationIP = "";
+  int _currentIndex = 0;
   
   // Map to group statuses together
   Map<String, List<String>> statusGroups = {
@@ -226,6 +229,37 @@ Future<LatLng?> getCoordinatesFromAddress(String address) async {
             ),
           ),
         ],
+      ),
+        bottomNavigationBar: BottomNavigationBar(
+        fixedColor: Colors.black,
+        type: BottomNavigationBarType.fixed,
+        iconSize: 30,
+        items: [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.local_offer),
+            label: 'Khuyến mãi',
+            backgroundColor: Colors.pink,
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.account_circle),
+            label: 'Tài Khoản',
+            backgroundColor: Colors.cyanAccent,
+          ),
+        ],
+        currentIndex: _currentIndex,
+        onTap: (index) {
+          setState(() {
+            _currentIndex = index;
+          });
+          if (index == 0) {
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => PostPage()));
+          }
+          if (index == 1) {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => ProfilePage()));
+          }
+        },
       ),
     );
   }

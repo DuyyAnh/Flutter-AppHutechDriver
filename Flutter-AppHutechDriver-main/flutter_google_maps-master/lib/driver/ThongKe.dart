@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'StatisticalData.dart';
+import '../data/StatisticalData.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbols.dart';
 

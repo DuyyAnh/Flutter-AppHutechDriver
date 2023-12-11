@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_google_maps/post.dart';
-import 'package:flutter_google_maps/profile.dart';
-import 'package:flutter_google_maps/signIn.dart';
+import 'package:flutter_google_maps/data/post.dart';
+import 'package:flutter_google_maps/member/profile.dart';
+import 'package:flutter_google_maps/login/signIn.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:http/http.dart' as http;
-import 'listtrip.dart';
+import '../sharedviews/listtrip.dart';
 import 'main.dart';
 import 'dart:convert';
 
