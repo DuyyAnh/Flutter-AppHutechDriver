@@ -10,6 +10,8 @@ import 'package:geolocator/geolocator.dart';
 import 'package:flutter_google_maps/data/token.dart';
 import 'package:flutter_google_maps/member/profile.dart';
 import 'package:flutter_google_maps/member/listpost.dart';
+
+import 'ThongKe.dart';
 class DriverPage extends StatefulWidget {
   @override
   _DriverPageState createState() => _DriverPageState();
@@ -237,7 +239,12 @@ Future<LatLng?> getCoordinatesFromAddress(String address) async {
         items: [
           BottomNavigationBarItem(
             icon: Icon(Icons.local_offer),
-            label: 'Khuyến mãi',
+            label: 'Home',
+            backgroundColor: Colors.pink,
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.local_offer),
+            label: 'Thống kê',
             backgroundColor: Colors.pink,
           ),
           BottomNavigationBarItem(
@@ -253,11 +260,15 @@ Future<LatLng?> getCoordinatesFromAddress(String address) async {
           });
           if (index == 0) {
             Navigator.push(
-                context, MaterialPageRoute(builder: (context) => PostPage()));
+                context, MaterialPageRoute(builder: (context) => DriverPage()));
           }
           if (index == 1) {
             Navigator.push(context,
-                MaterialPageRoute(builder: (context) => ProfilePage()));
+                MaterialPageRoute(builder: (context) => ThongKe()));
+          }
+          if (index == 2) {
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => DriverPage()));
           }
         },
       ),

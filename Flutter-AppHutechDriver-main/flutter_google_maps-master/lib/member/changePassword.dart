@@ -71,7 +71,18 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: Text('Đổi mật khẩu')),
+        appBar: AppBar(
+          leading: IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: Icon(Icons.arrow_back_ios),
+          ),
+          title: Padding(
+            padding: const EdgeInsets.all(70.0),
+            child: Text('Đổi mật khẩu'),
+          ),
+        ),
         body: Container(
           padding: EdgeInsets.fromLTRB(30, 0, 30, 0),
           constraints: BoxConstraints.expand(),

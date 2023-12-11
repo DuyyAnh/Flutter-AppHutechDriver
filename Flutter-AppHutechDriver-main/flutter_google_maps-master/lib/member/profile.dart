@@ -4,7 +4,9 @@ import 'package:flutter_google_maps/login/register.dart';
 import 'package:flutter_google_maps/login/signIn.dart';
 import 'package:flutter_google_maps/data/token.dart';
 import 'package:http/http.dart' as http;
+import '../sharedviews/listtrip.dart';
 import 'edit_profile.dart';
+import 'listpost.dart';
 import 'main.dart';
 import 'dart:convert';
 
@@ -275,15 +277,13 @@ class _ProfilePageState extends State<ProfilePage> {
           }
           if (index == 1) {
             Navigator.push(
-                context, MaterialPageRoute(builder: (context) => LoginPage()));
+                context, MaterialPageRoute(builder: (context) => ListTripPage()));
           }
           if (index == 2) {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => RegisterPage()));
+            Navigator.push(context, MaterialPageRoute(builder: (context) => PostPage()));
           }
           if (index == 3) {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => ProfilePage()));
+            Navigator.push(context, MaterialPageRoute(builder: (context) => ProfilePage()));
           }
         },
       ),

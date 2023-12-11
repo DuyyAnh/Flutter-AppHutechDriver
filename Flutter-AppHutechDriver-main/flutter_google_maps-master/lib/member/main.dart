@@ -16,6 +16,7 @@ import 'dart:convert';
 import 'package:google_places_flutter/google_places_flutter.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_google_maps/member/listpost.dart';
+
 void main() {
   HttpOverrides.global = new MyHttpOverrides();
   runApp(
@@ -504,7 +505,7 @@ class MapSampleState extends State<MapSample> {
                                   child: Padding(
                                     padding: const EdgeInsets.all(3.0),
                                       child: Text(
-                                        'Hiển thị quảng đường'.toUpperCase(),
+                                        'Hiển thị quãng đường'.toUpperCase(),
                                         style: TextStyle(
                                           color: Colors.white,
                                           fontSize: 20.0,

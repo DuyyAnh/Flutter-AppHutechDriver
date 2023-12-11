@@ -102,7 +102,12 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: Text('Đăng nhập')),
+        appBar: AppBar(
+          title: Padding(
+            padding: const EdgeInsets.all(134.0),
+            child: Text('Đăng nhập'),
+          ),
+        ),
         body: Container(
           padding: EdgeInsets.fromLTRB(30, 0, 30, 0),
           constraints: BoxConstraints.expand(),
@@ -133,7 +138,7 @@ class _LoginPageState extends State<LoginPage> {
                       labelText: 'Tài khoản',
                       prefixIcon: Container(
                         width: 50,
-                        child: Image.asset('assets/image/ic_mail.png'),
+                        child: Icon(Icons.person_outline),
                       ),
                       border: OutlineInputBorder(
                           borderSide:

@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_google_maps/member/listpost.dart';
 import 'package:flutter_google_maps/sharedviews/detailTrip.dart';
 import 'package:flutter_google_maps/data/trip.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:intl/intl.dart';
+
+import '../member/main.dart';
+import '../member/profile.dart';
 
 class ListTripPage extends StatefulWidget {
   @override
@@ -13,7 +17,7 @@ class ListTripPage extends StatefulWidget {
 class _ListTripPageState extends State<ListTripPage> {
   List<Trip> trips = [];
   int driverId = 0;
-
+  int _currentIndex = 0;
   @override
   void initState() {
     super.initState();
@@ -83,7 +87,17 @@ class _ListTripPageState extends State<ListTripPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Driver'),
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: Icon(Icons.arrow_back_ios),
+        ),
+        title: Padding(
+          padding: const EdgeInsets.all(60.0),
+          child: Text('Lịch sử hoạt động'),
+
+        ),
       ),
       body: Column(
         children: [
@@ -119,6 +133,55 @@ class _ListTripPageState extends State<ListTripPage> {
             ),
           ),
         ],
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        fixedColor: Colors.black,
+        type: BottomNavigationBarType.fixed,
+        iconSize: 30,
+        items: [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Trang chủ',
+            backgroundColor: Colors.blue,
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.access_time),
+            label: 'Họạt động',
+            backgroundColor: Colors.red,
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.local_offer),
+            label: 'Khuyến mãi',
+            backgroundColor: Colors.pink,
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.account_circle),
+            label: 'Tài Khoản',
+            backgroundColor: Colors.cyanAccent,
+          ),
+        ],
+        currentIndex: _currentIndex,
+        onTap: (index) {
+          setState(() {
+            _currentIndex = index;
+          });
+          if (index == 0) {
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => MapSample()));
+          }
+          if (index == 1) {
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => ListTripPage()));
+          }
+          if (index == 2) {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => PostPage()));
+          }
+          if (index == 3) {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => ProfilePage()));
+          }
+        },
       ),
     );
   }

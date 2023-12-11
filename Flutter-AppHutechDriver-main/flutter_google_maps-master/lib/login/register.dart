@@ -51,9 +51,17 @@ class _RegisterPageState extends State<RegisterPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        iconTheme: IconThemeData(color: Color(0xff327708)),
-        elevation: 0,
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: Icon(Icons.arrow_back_ios),
+        ),
+        title: Padding(
+          padding: const EdgeInsets.all(60.0),
+          child: Text('Đăng ký tài khoản'),
+
+        ),
       ),
       body: Container(
         padding: EdgeInsets.fromLTRB(30, 0, 30, 0),
